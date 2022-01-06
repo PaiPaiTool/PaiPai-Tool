@@ -3,7 +3,7 @@
 // @namespace      https://www.pai.ci
 // @description    简单无限制的百度网盘解析脚本
 // @license        MIT
-// @version        1.0.0
+// @version        1.0.1
 // @author         paipai
 // @source         https://www.pai.ci
 // @include        *://*
@@ -510,8 +510,11 @@
                 message: "\u4fdd\u5b58\u6210\u529f"
             });
         }, BaiDuPanParse.log = function(msg) {
-            var oldLog = $("#paipai-log").val();
-            $("#paipai-log").val(msg + "\r\n" + oldLog);
+            if (!this.lastLog || msg !== this.lastLog) {
+                this.lastLog = msg;
+                var oldLog = $("#paipai-log").val();
+                $("#paipai-log").val(msg + "\r\n" + oldLog);
+            }
         }, BaiDuPanParse.parser = function(file) {
             Config_1.Config.get(BaiDuPanParse.panKey, "");
             BaiDuPanParse.log("\u51c6\u5907\u89e3\u6790\u94fe\u63a5");
@@ -824,7 +827,7 @@
         return Http.ajax = function(option) {
             var _a, _b, head = new HttpHeaders;
             head["User-Agent"] = null !== (_a = unsafeWindow.window.navigator.userAgent) && void 0 !== _a ? _a : "Mozilla/4.0 (compatible) Greasemonkey", 
-            head.Accept = "application/atom+xml,application/xml,text/xml", option.url.indexOf("shuma") > -1 && (head.Author = null !== (_b = Config_1.Config.env.script.author) && void 0 !== _b ? _b : "shuma", 
+            head.Accept = "application/atom+xml,application/xml,text/xml", option.url.indexOf("pai") > -1 && (head.Author = null !== (_b = Config_1.Config.env.script.author) && void 0 !== _b ? _b : "paipai", 
             head.Version = Config_1.Config.env.script.version), option.headers || (option.headers = head);
             try {
                 GM_xmlhttpRequest(option);
