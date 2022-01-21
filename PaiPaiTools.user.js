@@ -3,11 +3,11 @@
 // @namespace      https://www.pai.ci
 // @description    【2022/01/19稳定奔放速度拉满】简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.0.3
+// @version        1.1.0
 // @author         paipai
 // @source         https://www.pai.ci
 // @include        *://*
-// @require        https://cdn.jsdelivr.net/npm/mdui@1.0.2/dist/js/mdui.min.js
+// @require        https://lib.baomitu.com/mdui/1.0.2/js/mdui.min.js
 // @require        https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js
 // @supportURL     https://www.pai.ci
 // @grant          GM_xmlhttpRequest
@@ -76,8 +76,8 @@
     Object.defineProperty(exports, "__esModule", {
         value: !0
     }), exports.Logger = void 0;
-    __webpack_require__(18);
-    var LogLevel_1 = __webpack_require__(19), Logger = function() {
+    __webpack_require__(15);
+    var LogLevel_1 = __webpack_require__(16), Logger = function() {
         function Logger() {}
         return Logger.log = function(msg, level) {}, Logger.debug = function(msg) {
             this.log(msg, LogLevel_1.LogLevel.debug);
@@ -222,42 +222,16 @@
     "use strict";
     Object.defineProperty(exports, "__esModule", {
         value: !0
-    }), exports.IocAuto = exports.Container = void 0, __webpack_require__(14);
+    }), exports.Container = void 0;
     var container = new Map, Container = function() {
         function Container() {}
-        return Container.Registe = function(type, args) {
-            var className = this.processName(type.name);
-            return container.set(className, window.Reflect.construct(type, this.buildParams(args))), 
-            container.get(className);
-        }, Container.buildParams = function(args) {
-            var para = [];
-            return null == args || args.map((function(item) {
-                para.push(item);
-            })), para;
-        }, Container.processName = function(name) {
-            return name.toLowerCase();
-        }, Container.Require = function(type) {
-            var _this = this;
-            if (null == type) return null;
-            var name = this.processName(type.name);
-            if (container.has(name)) return container.get(name);
-            var args, classParams = Reflect.getMetadata(METADATA_PARAMS, type);
-            return (null == classParams ? void 0 : classParams.length) && (args = classParams.map((function(item) {
-                return _this.Require(item);
-            }))), this.Registe(type, args);
-        }, Container.define = function(target, key) {
-            var _a, classType = Reflect.getMetadata(METADATA_TYPE, target, key), desc = null !== (_a = Object.getOwnPropertyDescriptor(target, key)) && void 0 !== _a ? _a : {
-                writable: !0,
-                configurable: !0
-            };
-            desc.value = this.Require(classType), Object.defineProperty(target, key, desc);
+        return Container.register = function(app) {
+            var className = app.name.toLowerCase();
+            return container.has(className) ? container.get(className) : className ? (container.set(className, window.Reflect.construct(app, [])), 
+            container.get(className)) : void 0;
         }, Container;
     }();
     exports.Container = Container;
-    var METADATA_TYPE = "design:type", METADATA_PARAMS = "design:paramtypes";
-    exports.IocAuto = function IocAuto(target, key) {
-        Container.define(target, key);
-    };
 }, function(module, exports, __webpack_require__) {
     "use strict";
     var __extends = this && this.__extends || (extendStatics = function(d, b) {
@@ -385,7 +359,7 @@
     Object.defineProperty(exports, "__esModule", {
         value: !0
     }), exports.BaiDuPanParse = void 0;
-    var AppBase_1 = __webpack_require__(20), SiteEnum_1 = __webpack_require__(6), Ele_1 = __webpack_require__(22), EventEnum_1 = __webpack_require__(8), Alert_1 = __webpack_require__(23), Logger_1 = __webpack_require__(0), PanInfo_1 = __webpack_require__(27), BaiduRoutes_1 = __webpack_require__(28), Common_1 = __webpack_require__(11), Config_1 = __webpack_require__(12), clipboard_1 = __importDefault(__webpack_require__(29)), Core_1 = __webpack_require__(7), AriaConfig_1 = __webpack_require__(30), Http_1 = __webpack_require__(10), mdui_1 = __importDefault(__webpack_require__(31)), BaiDuPanParse = function(_super) {
+    var AppBase_1 = __webpack_require__(17), SiteEnum_1 = __webpack_require__(6), Ele_1 = __webpack_require__(19), EventEnum_1 = __webpack_require__(8), Alert_1 = __webpack_require__(20), Logger_1 = __webpack_require__(0), PanInfo_1 = __webpack_require__(24), BaiduRoutes_1 = __webpack_require__(25), Common_1 = __webpack_require__(11), Config_1 = __webpack_require__(12), clipboard_1 = __importDefault(__webpack_require__(26)), Core_1 = __webpack_require__(7), AriaConfig_1 = __webpack_require__(27), Http_1 = __webpack_require__(10), mdui_1 = __importDefault(__webpack_require__(28)), BaiDuPanParse = function(_super) {
         function BaiDuPanParse() {
             var _this = null !== _super && _super.apply(this, arguments) || this;
             return _this.appName = "\u7f51\u76d8\u89e3\u6790", _this.rules = new Map([ [ SiteEnum_1.SiteEnum.BD_DETAIL_OLD, /[pan|yun].baidu.com\/disk\/home/i ], [ SiteEnum_1.SiteEnum.BD_DETAIL_Share, /[pan|yun].baidu.com\/s\//i ], [ SiteEnum_1.SiteEnum.BD_DETAIL_NEW, /[pan|yun].baidu.com\/disk\/main/i ] ]), 
@@ -404,7 +378,7 @@
             }, _this;
         }
         return __extends(BaiDuPanParse, _super), BaiDuPanParse.prototype.loader = function() {
-            Core_1.Core.addStyleUrl("//cdn.jsdelivr.net/npm/mdui@1.0.2/dist/css/mdui.min.css");
+            Core_1.Core.addStyleUrl("//lib.baomitu.com/mdui/1.0.2/css/mdui.min.css");
         }, BaiDuPanParse.prototype.run = function() {
             switch (BaiDuPanParse._site = this.site, this.site) {
               case SiteEnum_1.SiteEnum.BD_DETAIL_OLD:
@@ -457,21 +431,129 @@
             Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u65b0\u7248\u9875\u9762,\u8bf7\u8fd4\u56de\u65e7\u7248\u5217\u8868\u4f7f\u7528\u89e3\u6790");
         }, BaiDuPanParse.initDownFile = function() {
             var fileList = BaiDuPanParse.getSelectedFileListHome();
-            if (Logger_1.Logger.debug(fileList), null != fileList && 0 != (null == fileList ? void 0 : fileList.length)) if (BaiDuPanParse.isMultipleFile(fileList)) Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u591a\u6587\u4ef6\u6216\u6587\u4ef6\u5939\u89e3\u6790!", 3, "error"); else {
-                var file = fileList[0], box = '\n<div class="mdui-dialog" id="paipai-box">\n    <div class="mdui-tab mdui-tab-full-width" id="paipai-tab">\n        <a href="#paipai-file" class="mdui-tab-active mdui-ripple">\u6587\u4ef6\u89e3\u6790</a>\n        <a href="#paipai-aria" class="mdui-ripple">Aria2\u914d\u7f6e</a>\n        <a href="#paipai-contant" class="mdui-ripple">\u5173\u6ce8\u6211</a>\n    </div>\n    <div class="mdui-p-a-2" id="paipai-aria">\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u5730\u5740</label>\n            <input class="mdui-textfield-input" type="text" placeholder="http://localhost:6800/jsonrpc" id="rpcUrl"/>\n        </div>\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u5bc6\u94a5(Token)</label>\n            <input class="mdui-textfield-input" type="text" placeholder="\u9ed8\u8ba4\u7559\u7a7a" id="rpcToken"/>\n        </div>\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u9ed8\u8ba4\u4e0b\u8f7d\u5730\u5740</label>\n            <input class="mdui-textfield-input" type="text" placeholder="C:\\Aria" id="rpcDir"/>\n        </div>\n        <div class="mdui-dialog-actions">\n            <button class="mdui-btn mdui-ripple" id="paipai-aria-save">\u4fdd\u5b58</button>\n            <button class="mdui-btn mdui-ripple paipai-close">\u5173\u95ed</button>\n        </div>\n    </div>\n    <div class="mdui-p-a-2" id="paipai-contant">\n        <div id="mdui-col-xs-18 ">\n            <div>  \n                <img src="' + BaiDuPanParse.qrcode + '" alt="\u6d3e\u6d3e\u52a9\u624b" class="mdui-img-rounded mdui-center" width="50%">\n            </div>\n            <p style="text-align: center">\u626b\u7801\u5173\u6ce8\u516c\u4f17\u53f7\u3010\u79d1\u6280\u4e00\u6c2a\u3011\u9632\u5931\u8054</p>\n        </div>\n    </div>\n    <div class="mdui-p-a-2" id="paipai-file">\n        <div>\n            <div class="mdui-col-xs-18 mdui-p-a-1 mdui-color-grey-200 mdui-typo">\n                <p>\u6587\u4ef6\u540d:<b>' + file.server_filename + "</b></p>\n                <p>md5:<b>" + file.md5 + "</b></p>\n                <p>\u6587\u4ef6\u5927\u5c0f:<b>" + Common_1.Common.humanSize(file.size) + "</b></p>\n                <p>\u4e0a\u4f20\u65f6\u95f4:<b>" + new Date(1e3 * file.server_ctime).toLocaleString() + '</b></p>\n                <div class="mdui-divider mdui-m-y-1"></div>                \n                <div class="mdui-m-t-1">\n                    <button id="paipai-parser" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u83b7\u53d6\u76f4\u94fe</button>\n                    <a href="javascript:;" id="paipai-parser-url" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u70b9\u51fb\u590d\u5236\u76f4\u94fe</a>\n                    <button id="paipai-ua-copy" data-clipboard-text="\u8bf7\u5148\u89e3\u6790\u6587\u4ef6\u5728\u590d\u5236UA" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u590d\u5236UA</button>       \n                    <button id="paipai-btn-aria" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u53d1\u9001\u5230Aria</button>\n                </div>\n                <p><b style="color: red">\u89e3\u6790\u540e\u4f7f\u7528IDM\u6216\u5176\u4ed6\u4e0b\u8f7d\u5668\u65f6,\u8bf7\u4f7f\u7528\u4e0a\u65b9\u6309\u94ae\u624b\u52a8\u590d\u5236UA\u4fe1\u606f</b></p>\n                <div class="mdui-divider mdui-m-y-1"></div>\n                <div>\n                    <button id="paipai-btn-help" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u4f7f\u7528\u5e2e\u52a9</button>\n                    <button id="paipai-btn-install" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u811a\u672c\u5b89\u88c5</button>\n                    <button id="paipai-btn-joinus" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u5efa\u8bae\u53cd\u9988</button>\n                </div>\n            </div>\n            <div class="mdui-textfield">\n                <label class="mdui-textfield-label">\u65e5\u5fd7</label>\n                <textarea class="mdui-textfield-input mdui-text-rea" rows="4" id="paipai-log" disabled>\u521d\u59cb\u5316\u6210\u529f</textarea>\n            </div>\n        </div>\n        <div class="mdui-dialog-actions">\n            <button class="mdui-btn mdui-ripple paipai-close" id="paipai-close">\u5173\u95ed</button>\n        </div>\n    </div>\n</div>';
-                BaiDuPanParse.md = new mdui_1.default.Dialog(box, {
-                    modal: !0
-                }), BaiDuPanParse.md.open();
-                new mdui_1.default.Tab("#paipai-tab");
-                BaiDuPanParse.md.handleUpdate(), BaiDuPanParse.bindEvents();
-                var boxH = {
-                    top: ($(unsafeWindow.window).height() - $("#paipai-box").height()) / 2 + "px"
-                };
-                $("#paipai-box").css(boxH), $("#paipai-parser").on("click", (function() {
-                    $("#paipai-parser").attr("disabled", "true"), BaiDuPanParse.parser(file);
+            Logger_1.Logger.debug(fileList), null != fileList && 0 != (null == fileList ? void 0 : fileList.length) ? BaiDuPanParse.isMultipleFile(fileList) && BaiDuPanParse.isDirFile(fileList) ? Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u6587\u4ef6\u5939\u89e3\u6790!", 3, "error") : (null == fileList ? void 0 : fileList.length) > 20 ? Alert_1.Alert.info("\u9009\u62e9\u6587\u4ef6\u8fc7\u591a,\u8bf7\u9009\u62e920\u4e2a\u4ee5\u5185\u7684\u6587\u4ef6\u8fdb\u884c\u89e3\u6790", 3, "error") : BaiDuPanParse.isMultipleFile(fileList) ? BaiDuPanParse.initMultipleDownFile(fileList) : BaiDuPanParse.initSingleDownFile(fileList[0]) : Alert_1.Alert.info("\u8fd8\u6ca1\u9009\u6587\u4ef6\u54e6~", 3, "warning");
+        }, BaiDuPanParse.initMultipleDownFile = function(fileList) {
+            var box = '\n<div class="mdui-dialog" id="paipai-box-m">\n    <div class="mdui-dialog-content">\n        <div class="mdui-dialog-title">\u6279\u91cf\u89e3\u6790,\u5f53\u524d\u5171\u9009\u62e9\u4e86[' + fileList.length + ']\u4e2a\u6587\u4ef6</div>\n        <div class="mdui-table-fluid">\n          <table class="mdui-table mdui-table-hoverable">\n            <thead>\n            <tr>\n              <th>\u6587\u4ef6\u540d</th>\n              <th style="min-width: 240px">\u64cd\u4f5c</th>\n            </tr>\n            </thead>\n            <tbody>\n            ' + function(fileList) {
+                var h = "";
+                return fileList.map((function(item) {
+                    h += "<tr>\n                        <td>" + item.server_filename + '</td>\n                        <td id="paipai-file-' + item.fs_id + '">\n                            <button id="paipai-wait-' + item.fs_id + '" data-fid="' + item.fs_id + '" data-title="' + item.server_filename + '" class="mdui-btn mdui-color-pink-700 mdui-btn-dense mdui-btn-raised paipai-multiple-parser">\u5f85\u89e3\u6790</button>\n                            <button id="paipai-parser-url-' + item.fs_id + '" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-btn-dense mdui-btn-raised">\u590d\u5236\u76f4\u94fe</button>\n                            <button id="paipai-parser-ua-' + item.fs_id + '" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-btn-dense mdui-btn-raised">\u590d\u5236UA</button>                 \n                            <button id="paipai-parser-aria-' + item.fs_id + '" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-btn-dense mdui-btn-raised paipai-multiple-aria">\u53d1\u9001Aria</button>                 \n                        </td>\n                     </tr>';
+                })), h;
+            }(fileList) + '\n            </tbody>\n          </table>\n        </div>\n    </div>\n    <div class="mdui-dialog-actions">      \n      <button class="mdui-btn mdui-ripple" id="paipai-multiple-parser">\u6279\u91cf\u89e3\u6790</button>\n      <button class="mdui-btn mdui-ripple" id="paipai-multiple-aria">\u6279\u91cf\u53d1\u9001Aria</button>\n      <button class="mdui-btn mdui-ripple paipai-close">\u5173\u95ed</button>\n    </div>\n</div>\n        ';
+            BaiDuPanParse.md = new mdui_1.default.Dialog(box, {
+                modal: !0
+            }), BaiDuPanParse.md.open();
+            var boxH = {
+                top: ($(unsafeWindow.window).height() - $("#paipai-box-m").height()) / 2 + "px"
+            };
+            $("#paipai-box-m").css(boxH), this.multipleEvent();
+        }, BaiDuPanParse.multipleEvent = function() {
+            var _this = this;
+            $(".paipai-close").on("click", (function() {
+                var _a, _b;
+                null === (_a = BaiDuPanParse.md) || void 0 === _a || _a.close(), null === (_b = BaiDuPanParse.md) || void 0 === _b || _b.destroy();
+            }));
+            var that = this;
+            $(".paipai-multiple-parser").on("click", (function(ele) {
+                var e = $(ele.target), fid = e.attr("data-fid"), fileName = e.attr("data-title");
+                new mdui_1.default.Tooltip("#paipai-wait-" + fid, {
+                    content: ""
+                }), e.attr("disabled", "true"), that.__parser(Number.parseInt(fid)).then((function(res) {
+                    1 == res.code ? ($("#paipai-wait-" + fid).hide(), $("#paipai-parser-url-" + fid).show(), 
+                    $("#paipai-parser-ua-" + fid).show(), $("#paipai-parser-aria-" + fid).show(), $("#paipai-parser-url-" + fid).attr("data-clipboard-text", res.data.dlink), 
+                    new clipboard_1.default("#paipai-parser-url-" + fid).on("success", (function() {
+                        Alert_1.Alert.info("\u590d\u5236\u6210\u529f");
+                    })), $("#paipai-parser-ua-" + fid).attr("data-clipboard-text", res.data.ua), new clipboard_1.default("#paipai-parser-ua-" + fid).on("success", (function() {
+                        Alert_1.Alert.info("\u590d\u5236\u6210\u529f");
+                    })), $("#paipai-parser-aria-" + fid).on("click", (function() {
+                        BaiDuPanParse.__sentToAria(res.data.dlink, fileName, res.data.ua).then((function() {
+                            Alert_1.Alert.info("\u53d1\u9001\u6210\u529f");
+                        })).catch((function(r) {
+                            Alert_1.Alert.info(r, 5, "error");
+                        }));
+                    }))) : that.errorButton(e, res.msg, fid);
+                }), (function(rejects) {
+                    _this.errorButton(e, rejects, fid);
+                })).finally((function() {
+                    e.removeAttr("disabled");
                 }));
-            } else Alert_1.Alert.info("\u8fd8\u6ca1\u9009\u6587\u4ef6\u54e6~", 3, "warning");
-        }, BaiDuPanParse.bindEvents = function() {
+            })), $("#paipai-multiple-parser").on("click", (function(ele) {
+                $(".paipai-multiple-parser:visible").length ? $(".paipai-multiple-parser:visible").click() : (Alert_1.Alert.info("\u5df2\u5168\u90e8\u89e3\u6790\u5b8c\u6210"), 
+                $(ele.target).hide());
+            })), $("#paipai-multiple-aria").on("click", (function() {
+                $(".paipai-multiple-aria:visible").length ? $(".paipai-multiple-aria").click() : Alert_1.Alert.info("\u6ca1\u6709\u53ef\u4ee5\u53d1\u9001\u7684\u6570\u636e", 2, "error");
+            }));
+        }, BaiDuPanParse.errorButton = function(e, txt, fid) {
+            e.text("\u89e3\u6790\u5931\u8d25");
+            new mdui_1.default.Tooltip("#paipai-wait-" + fid, {
+                content: txt + "\u3010\u70b9\u51fb\u91cd\u8bd5\u3011"
+            });
+        }, BaiDuPanParse.__parser = function(fs_id) {
+            return new Promise((function(resolve, rejects) {
+                Config_1.Config.get(BaiDuPanParse.panKey, "");
+                try {
+                    var pcsInfo = void 0;
+                    pcsInfo = BaiDuPanParse._site == SiteEnum_1.SiteEnum.BD_DETAIL_Share ? new Promise((function(resolve, reject) {
+                        BaiduRoutes_1.BaiduRoutes.getSign(BaiDuPanParse.getSurl()).then((function(e) {
+                            0 == e.errno ? resolve(BaiduRoutes_1.BaiduRoutes.pcsQueryV2(e.data.sign, e.data.timestamp, [ fs_id ])) : reject("\u89e3\u6790\u5931\u8d25[\u6587\u4ef6\u672a\u4fdd\u5b58\u5230\u7f51\u76d8]");
+                        }));
+                    })) : BaiduRoutes_1.BaiduRoutes.pcsQuery([ fs_id ]);
+                    var pan_1 = new PanInfo_1.PanInfo;
+                    pan_1.id = fs_id.toString(), pcsInfo.then((function(res) {
+                        if ("succ" == (null == res ? void 0 : res.errmsg)) {
+                            var paninfo = res.list[0];
+                            BaiDuPanParse.getParseUrl(null == paninfo ? void 0 : paninfo.dlink, pan_1).then((function(panFile) {
+                                resolve(panFile);
+                            })).catch((function(res) {
+                                rejects("\u89e3\u6790\u5931\u8d25[" + JSON.stringify(res) + "]");
+                            }));
+                        } else rejects("\u89e3\u6790\u5931\u8d25[pcs\u4fe1\u606f\u83b7\u53d6\u5931\u8d25]");
+                    }));
+                } catch (e) {
+                    rejects("\u89e3\u6790\u5931\u8d25[" + JSON.stringify(e) + "]");
+                }
+            }));
+        }, BaiDuPanParse.__sentToAria = function(fileUrl, fileName, userAgent) {
+            return new Promise((function(resolve, reject) {
+                var ariaConfig = Config_1.Config.get(BaiDuPanParse.AriaConfig, {
+                    rpcUrl: "http://localhost:6800/jsonrpc",
+                    rpcToken: "",
+                    rpcDic: "c:aria"
+                }), _ariaConfig = ariaConfig;
+                if ("" != _ariaConfig.rpcDic && "" != _ariaConfig.rpcUrl) {
+                    var ariaData = {
+                        jsonrpc: "2.0",
+                        id: "1629360475902",
+                        method: "aria2.addUri",
+                        params: [ "token:" + ariaConfig.rpcToken, [ "" + fileUrl ], {
+                            dir: "" + ariaConfig.rpcDic,
+                            out: "" + fileName,
+                            "user-agent": "" + userAgent,
+                            "max-connection-per-server": "4",
+                            split: "4",
+                            "piece-length": "1M"
+                        } ]
+                    };
+                    Http_1.Http.post(_ariaConfig.rpcUrl, ariaData, "json").then((function(res) {
+                        resolve("\u53d1\u9001\u6210\u529f\uff01");
+                    })).catch((function(e) {
+                        (null == e ? void 0 : e.error.indexOf("part of")) > -1 ? reject("\u5f53\u524dAria\u57df\u540d\u672a\u52a0\u5165\u767d\u540d\u5355,\u8bf7\u52a0\u5165\u767d\u540d\u5355\u540e\u91cd\u8bd5") : reject("\u53d1\u9001\u81f3Aria2\u65f6\u53d1\u751f\u672a\u77e5\u9519\u8bef\uff0c\u8bf7\u91cd\u8bd5\uff01");
+                    }));
+                } else reject("Aria2\u4e0b\u8f7d\u5668\u914d\u7f6e\u5c1a\u672a\u914d\u7f6e\u5b8c\u6210,\u8bf7\u5148\u914d\u7f6eAria2\u4e0b\u8f7d\u5668\u4fe1\u606f");
+            }));
+        }, BaiDuPanParse.initSingleDownFile = function(file) {
+            var box = '\n<div class="mdui-dialog" id="paipai-box">\n    <div class="mdui-tab mdui-tab-full-width" id="paipai-tab">\n        <a href="#paipai-file" class="mdui-tab-active mdui-ripple">\u6587\u4ef6\u89e3\u6790</a>\n        <a href="#paipai-aria" class="mdui-ripple">Aria2\u914d\u7f6e</a>\n        <a href="#paipai-contant" class="mdui-ripple">\u5173\u6ce8\u6211</a>\n    </div>\n    <div class="mdui-p-a-2" id="paipai-aria">\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u5730\u5740</label>\n            <input class="mdui-textfield-input" type="text" placeholder="http://localhost:6800/jsonrpc" id="rpcUrl"/>\n        </div>\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u5bc6\u94a5(Token)</label>\n            <input class="mdui-textfield-input" type="text" placeholder="\u9ed8\u8ba4\u7559\u7a7a" id="rpcToken"/>\n        </div>\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u9ed8\u8ba4\u4e0b\u8f7d\u5730\u5740</label>\n            <input class="mdui-textfield-input" type="text" placeholder="C:\\Aria" id="rpcDir"/>\n        </div>\n        <div class="mdui-dialog-actions">\n            <button class="mdui-btn mdui-ripple" id="paipai-aria-save">\u4fdd\u5b58</button>\n            <button class="mdui-btn mdui-ripple paipai-close">\u5173\u95ed</button>\n        </div>\n    </div>\n    <div class="mdui-p-a-2" id="paipai-contant">\n        <div id="mdui-col-xs-18 ">\n            <div>  \n                <img src="' + BaiDuPanParse.qrcode + '" alt="\u6d3e\u6d3e\u52a9\u624b" class="mdui-img-rounded mdui-center" width="50%">\n            </div>\n            <p style="text-align: center">\u626b\u7801\u5173\u6ce8\u516c\u4f17\u53f7\u3010\u79d1\u6280\u4e00\u6c2a\u3011\u9632\u5931\u8054</p>\n        </div>\n    </div>\n    <div class="mdui-p-a-2" id="paipai-file">\n        <div>\n            <div class="mdui-col-xs-18 mdui-p-a-1 mdui-color-grey-200 mdui-typo">\n                <p>\u6587\u4ef6\u540d:<b>' + file.server_filename + "</b></p>\n                <p>md5:<b>" + file.md5 + "</b></p>\n                <p>\u6587\u4ef6\u5927\u5c0f:<b>" + Common_1.Common.humanSize(file.size) + "</b></p>\n                <p>\u4e0a\u4f20\u65f6\u95f4:<b>" + new Date(1e3 * file.server_ctime).toLocaleString() + '</b></p>\n                <div class="mdui-divider mdui-m-y-1"></div>                \n                <div class="mdui-m-t-1">\n                    <button id="paipai-parser" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u83b7\u53d6\u76f4\u94fe</button>\n                    <a href="javascript:;" id="paipai-parser-url" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u70b9\u51fb\u590d\u5236\u76f4\u94fe</a>\n                    <button id="paipai-ua-copy" data-clipboard-text="\u8bf7\u5148\u89e3\u6790\u6587\u4ef6\u5728\u590d\u5236UA" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u590d\u5236UA</button>       \n                    <button id="paipai-btn-aria" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u53d1\u9001\u5230Aria</button>\n                </div>\n                <p><b style="color: red">\u89e3\u6790\u540e\u4f7f\u7528IDM\u6216\u5176\u4ed6\u4e0b\u8f7d\u5668\u65f6,\u8bf7\u4f7f\u7528\u4e0a\u65b9\u6309\u94ae\u624b\u52a8\u590d\u5236UA\u4fe1\u606f</b></p>\n                <div class="mdui-divider mdui-m-y-1"></div>\n                <div>\n                    <button id="paipai-btn-help" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u4f7f\u7528\u5e2e\u52a9</button>\n                    <button id="paipai-btn-install" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u811a\u672c\u5b89\u88c5</button>\n                    <button id="paipai-btn-joinus" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u5efa\u8bae\u53cd\u9988</button>\n                </div>\n            </div>\n            <div class="mdui-textfield">\n                <label class="mdui-textfield-label">\u65e5\u5fd7</label>\n                <textarea class="mdui-textfield-input mdui-text-rea" rows="4" id="paipai-log" disabled>\u521d\u59cb\u5316\u6210\u529f</textarea>\n            </div>\n        </div>\n        <div class="mdui-dialog-actions">\n            <button class="mdui-btn mdui-ripple paipai-close" id="paipai-close">\u5173\u95ed</button>\n        </div>\n    </div>\n</div>';
+            BaiDuPanParse.md = new mdui_1.default.Dialog(box, {
+                modal: !0
+            }), BaiDuPanParse.md.open();
+            new mdui_1.default.Tab("#paipai-tab");
+            BaiDuPanParse.md.handleUpdate(), BaiDuPanParse.singleEvent();
+            var boxH = {
+                top: ($(unsafeWindow.window).height() - $("#paipai-box").height()) / 2 + "px"
+            };
+            $("#paipai-box").css(boxH), $("#paipai-parser").on("click", (function() {
+                $("#paipai-parser").attr("disabled", "true"), BaiDuPanParse.parser(file);
+            }));
+        }, BaiDuPanParse.singleEvent = function() {
             var currentCode = Config_1.Config.get(BaiDuPanParse.panCode, ""), currentKey = Config_1.Config.get(BaiDuPanParse.panKey, "");
             Config_1.Config.get(BaiDuPanParse.flowInfoKey);
             $("#paipai-key-setting").on("click", (function() {
@@ -527,11 +609,11 @@
                         resolve(BaiduRoutes_1.BaiduRoutes.pcsQueryV2(e.data.sign, e.data.timestamp, [ file.fs_id ]));
                     }));
                 })) : BaiduRoutes_1.BaiduRoutes.pcsQuery([ file.fs_id ]);
-                var pan_1 = new PanInfo_1.PanInfo;
-                pan_1.id = file.fs_id.toString(), pcsInfo.then((function(res) {
+                var pan_2 = new PanInfo_1.PanInfo;
+                pan_2.id = file.fs_id.toString(), pcsInfo.then((function(res) {
                     if (res) {
                         var paninfo = res.list[0];
-                        BaiDuPanParse.getParseUrl(null == paninfo ? void 0 : paninfo.dlink, pan_1).then((function(panFile) {
+                        BaiDuPanParse.getParseUrl(null == paninfo ? void 0 : paninfo.dlink, pan_2).then((function(panFile) {
                             1 == panFile.code ? (BaiDuPanParse.log("\u89e3\u6790\u5b8c\u6210"), BaiDuPanParse.setUrl(panFile.data.dlink), 
                             BaiDuPanParse.setUserAgent(panFile.data.ua), BaiDuPanParse.setAria2(panFile.data.dlink, file.server_filename, panFile.data.ua)) : Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", panFile.msg).then((function() {}));
                         })).catch((function(res) {
@@ -541,7 +623,7 @@
                 })), $("#paipai-parser").removeAttr("disabled");
             } catch (e) {
                 e ? BaiDuPanParse.log("\u89e3\u6790\u5931\u8d25,\u8bf7\u91cd\u8bd5") : BaiDuPanParse.log("\u8bf7\u6c42\u8d85\u65f6,\u8bf7\u91cd\u8bd5"), 
-                $("#paipai-parser").attr("disabled", "false");
+                $("#paipai-parser").removeAttr("disabled");
             }
         }, BaiDuPanParse.setUrl = function(url) {
             $("#paipai-parser").hide(), $("#paipai-parser-url").attr("data-clipboard-text", url).show();
@@ -639,6 +721,10 @@
             return (null == files ? void 0 : files.length) > 1 || !files.every((function(item) {
                 return 1 != item.isdir;
             }));
+        }, BaiDuPanParse.isDirFile = function(files) {
+            return !files.every((function(item) {
+                return 1 != item.isdir;
+            }));
         }, BaiDuPanParse.getSelectedFileListHome = function() {
             return eval("require('system-core:context/context.js').instanceForSystem.list.getSelected();");
         }, BaiDuPanParse.getPcs = function() {
@@ -709,7 +795,7 @@
     Object.defineProperty(exports, "__esModule", {
         value: !0
     }), exports.Core = void 0;
-    var BrowerType_1 = __webpack_require__(21), Core = function() {
+    var BrowerType_1 = __webpack_require__(18), Core = function() {
         function Core() {}
         return Core.currentUrl = function() {
             return window.location.href;
@@ -1005,614 +1091,8 @@
     Object.defineProperty(exports, "__esModule", {
         value: !0
     });
-    var Container_1 = __webpack_require__(4), home_1 = __webpack_require__(17);
-    Container_1.Container.Require(home_1.PaiPaiHelper).Init();
-}, function(module, exports, __webpack_require__) {
-    (function(process, global) {
-        var Reflect;
-        !function(Reflect) {
-            !function(factory) {
-                var root = "object" == typeof global ? global : "object" == typeof self ? self : "object" == typeof this ? this : Function("return this;")(), exporter = makeExporter(Reflect);
-                function makeExporter(target, previous) {
-                    return function(key, value) {
-                        "function" != typeof target[key] && Object.defineProperty(target, key, {
-                            configurable: !0,
-                            writable: !0,
-                            value: value
-                        }), previous && previous(key, value);
-                    };
-                }
-                void 0 === root.Reflect ? root.Reflect = Reflect : exporter = makeExporter(root.Reflect, exporter), 
-                function(exporter) {
-                    var hasOwn = Object.prototype.hasOwnProperty, supportsSymbol = "function" == typeof Symbol, toPrimitiveSymbol = supportsSymbol && void 0 !== Symbol.toPrimitive ? Symbol.toPrimitive : "@@toPrimitive", iteratorSymbol = supportsSymbol && void 0 !== Symbol.iterator ? Symbol.iterator : "@@iterator", supportsCreate = "function" == typeof Object.create, supportsProto = {
-                        __proto__: []
-                    } instanceof Array, downLevel = !supportsCreate && !supportsProto, HashMap = {
-                        create: supportsCreate ? function() {
-                            return MakeDictionary(Object.create(null));
-                        } : supportsProto ? function() {
-                            return MakeDictionary({
-                                __proto__: null
-                            });
-                        } : function() {
-                            return MakeDictionary({});
-                        },
-                        has: downLevel ? function(map, key) {
-                            return hasOwn.call(map, key);
-                        } : function(map, key) {
-                            return key in map;
-                        },
-                        get: downLevel ? function(map, key) {
-                            return hasOwn.call(map, key) ? map[key] : void 0;
-                        } : function(map, key) {
-                            return map[key];
-                        }
-                    }, functionPrototype = Object.getPrototypeOf(Function), usePolyfill = "object" == typeof process && process.env && "true" === process.env.REFLECT_METADATA_USE_MAP_POLYFILL, _Map = usePolyfill || "function" != typeof Map || "function" != typeof Map.prototype.entries ? CreateMapPolyfill() : Map, _Set = usePolyfill || "function" != typeof Set || "function" != typeof Set.prototype.entries ? CreateSetPolyfill() : Set, Metadata = new (usePolyfill || "function" != typeof WeakMap ? CreateWeakMapPolyfill() : WeakMap);
-                    function decorate(decorators, target, propertyKey, attributes) {
-                        if (IsUndefined(propertyKey)) {
-                            if (!IsArray(decorators)) throw new TypeError;
-                            if (!IsConstructor(target)) throw new TypeError;
-                            return DecorateConstructor(decorators, target);
-                        }
-                        if (!IsArray(decorators)) throw new TypeError;
-                        if (!IsObject(target)) throw new TypeError;
-                        if (!IsObject(attributes) && !IsUndefined(attributes) && !IsNull(attributes)) throw new TypeError;
-                        return IsNull(attributes) && (attributes = void 0), DecorateProperty(decorators, target, propertyKey = ToPropertyKey(propertyKey), attributes);
-                    }
-                    function metadata(metadataKey, metadataValue) {
-                        function decorator(target, propertyKey) {
-                            if (!IsObject(target)) throw new TypeError;
-                            if (!IsUndefined(propertyKey) && !IsPropertyKey(propertyKey)) throw new TypeError;
-                            OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
-                        }
-                        return decorator;
-                    }
-                    function defineMetadata(metadataKey, metadataValue, target, propertyKey) {
-                        if (!IsObject(target)) throw new TypeError;
-                        return IsUndefined(propertyKey) || (propertyKey = ToPropertyKey(propertyKey)), OrdinaryDefineOwnMetadata(metadataKey, metadataValue, target, propertyKey);
-                    }
-                    function hasMetadata(metadataKey, target, propertyKey) {
-                        if (!IsObject(target)) throw new TypeError;
-                        return IsUndefined(propertyKey) || (propertyKey = ToPropertyKey(propertyKey)), OrdinaryHasMetadata(metadataKey, target, propertyKey);
-                    }
-                    function hasOwnMetadata(metadataKey, target, propertyKey) {
-                        if (!IsObject(target)) throw new TypeError;
-                        return IsUndefined(propertyKey) || (propertyKey = ToPropertyKey(propertyKey)), OrdinaryHasOwnMetadata(metadataKey, target, propertyKey);
-                    }
-                    function getMetadata(metadataKey, target, propertyKey) {
-                        if (!IsObject(target)) throw new TypeError;
-                        return IsUndefined(propertyKey) || (propertyKey = ToPropertyKey(propertyKey)), OrdinaryGetMetadata(metadataKey, target, propertyKey);
-                    }
-                    function getOwnMetadata(metadataKey, target, propertyKey) {
-                        if (!IsObject(target)) throw new TypeError;
-                        return IsUndefined(propertyKey) || (propertyKey = ToPropertyKey(propertyKey)), OrdinaryGetOwnMetadata(metadataKey, target, propertyKey);
-                    }
-                    function getMetadataKeys(target, propertyKey) {
-                        if (!IsObject(target)) throw new TypeError;
-                        return IsUndefined(propertyKey) || (propertyKey = ToPropertyKey(propertyKey)), OrdinaryMetadataKeys(target, propertyKey);
-                    }
-                    function getOwnMetadataKeys(target, propertyKey) {
-                        if (!IsObject(target)) throw new TypeError;
-                        return IsUndefined(propertyKey) || (propertyKey = ToPropertyKey(propertyKey)), OrdinaryOwnMetadataKeys(target, propertyKey);
-                    }
-                    function deleteMetadata(metadataKey, target, propertyKey) {
-                        if (!IsObject(target)) throw new TypeError;
-                        IsUndefined(propertyKey) || (propertyKey = ToPropertyKey(propertyKey));
-                        var metadataMap = GetOrCreateMetadataMap(target, propertyKey, !1);
-                        if (IsUndefined(metadataMap)) return !1;
-                        if (!metadataMap.delete(metadataKey)) return !1;
-                        if (metadataMap.size > 0) return !0;
-                        var targetMetadata = Metadata.get(target);
-                        return targetMetadata.delete(propertyKey), targetMetadata.size > 0 || Metadata.delete(target), 
-                        !0;
-                    }
-                    function DecorateConstructor(decorators, target) {
-                        for (var i = decorators.length - 1; i >= 0; --i) {
-                            var decorated = (0, decorators[i])(target);
-                            if (!IsUndefined(decorated) && !IsNull(decorated)) {
-                                if (!IsConstructor(decorated)) throw new TypeError;
-                                target = decorated;
-                            }
-                        }
-                        return target;
-                    }
-                    function DecorateProperty(decorators, target, propertyKey, descriptor) {
-                        for (var i = decorators.length - 1; i >= 0; --i) {
-                            var decorated = (0, decorators[i])(target, propertyKey, descriptor);
-                            if (!IsUndefined(decorated) && !IsNull(decorated)) {
-                                if (!IsObject(decorated)) throw new TypeError;
-                                descriptor = decorated;
-                            }
-                        }
-                        return descriptor;
-                    }
-                    function GetOrCreateMetadataMap(O, P, Create) {
-                        var targetMetadata = Metadata.get(O);
-                        if (IsUndefined(targetMetadata)) {
-                            if (!Create) return;
-                            targetMetadata = new _Map, Metadata.set(O, targetMetadata);
-                        }
-                        var metadataMap = targetMetadata.get(P);
-                        if (IsUndefined(metadataMap)) {
-                            if (!Create) return;
-                            metadataMap = new _Map, targetMetadata.set(P, metadataMap);
-                        }
-                        return metadataMap;
-                    }
-                    function OrdinaryHasMetadata(MetadataKey, O, P) {
-                        if (OrdinaryHasOwnMetadata(MetadataKey, O, P)) return !0;
-                        var parent = OrdinaryGetPrototypeOf(O);
-                        return !IsNull(parent) && OrdinaryHasMetadata(MetadataKey, parent, P);
-                    }
-                    function OrdinaryHasOwnMetadata(MetadataKey, O, P) {
-                        var metadataMap = GetOrCreateMetadataMap(O, P, !1);
-                        return !IsUndefined(metadataMap) && ToBoolean(metadataMap.has(MetadataKey));
-                    }
-                    function OrdinaryGetMetadata(MetadataKey, O, P) {
-                        if (OrdinaryHasOwnMetadata(MetadataKey, O, P)) return OrdinaryGetOwnMetadata(MetadataKey, O, P);
-                        var parent = OrdinaryGetPrototypeOf(O);
-                        return IsNull(parent) ? void 0 : OrdinaryGetMetadata(MetadataKey, parent, P);
-                    }
-                    function OrdinaryGetOwnMetadata(MetadataKey, O, P) {
-                        var metadataMap = GetOrCreateMetadataMap(O, P, !1);
-                        if (!IsUndefined(metadataMap)) return metadataMap.get(MetadataKey);
-                    }
-                    function OrdinaryDefineOwnMetadata(MetadataKey, MetadataValue, O, P) {
-                        GetOrCreateMetadataMap(O, P, !0).set(MetadataKey, MetadataValue);
-                    }
-                    function OrdinaryMetadataKeys(O, P) {
-                        var ownKeys = OrdinaryOwnMetadataKeys(O, P), parent = OrdinaryGetPrototypeOf(O);
-                        if (null === parent) return ownKeys;
-                        var parentKeys = OrdinaryMetadataKeys(parent, P);
-                        if (parentKeys.length <= 0) return ownKeys;
-                        if (ownKeys.length <= 0) return parentKeys;
-                        for (var set = new _Set, keys = [], _i = 0, ownKeys_1 = ownKeys; _i < ownKeys_1.length; _i++) {
-                            var key = ownKeys_1[_i];
-                            set.has(key) || (set.add(key), keys.push(key));
-                        }
-                        for (var _a = 0, parentKeys_1 = parentKeys; _a < parentKeys_1.length; _a++) {
-                            key = parentKeys_1[_a];
-                            set.has(key) || (set.add(key), keys.push(key));
-                        }
-                        return keys;
-                    }
-                    function OrdinaryOwnMetadataKeys(O, P) {
-                        var keys = [], metadataMap = GetOrCreateMetadataMap(O, P, !1);
-                        if (IsUndefined(metadataMap)) return keys;
-                        for (var iterator = GetIterator(metadataMap.keys()), k = 0; ;) {
-                            var next = IteratorStep(iterator);
-                            if (!next) return keys.length = k, keys;
-                            var nextValue = IteratorValue(next);
-                            try {
-                                keys[k] = nextValue;
-                            } catch (e) {
-                                try {
-                                    IteratorClose(iterator);
-                                } finally {
-                                    throw e;
-                                }
-                            }
-                            k++;
-                        }
-                    }
-                    function Type(x) {
-                        if (null === x) return 1;
-                        switch (typeof x) {
-                          case "undefined":
-                            return 0;
-
-                          case "boolean":
-                            return 2;
-
-                          case "string":
-                            return 3;
-
-                          case "symbol":
-                            return 4;
-
-                          case "number":
-                            return 5;
-
-                          case "object":
-                            return null === x ? 1 : 6;
-
-                          default:
-                            return 6;
-                        }
-                    }
-                    function IsUndefined(x) {
-                        return void 0 === x;
-                    }
-                    function IsNull(x) {
-                        return null === x;
-                    }
-                    function IsSymbol(x) {
-                        return "symbol" == typeof x;
-                    }
-                    function IsObject(x) {
-                        return "object" == typeof x ? null !== x : "function" == typeof x;
-                    }
-                    function ToPrimitive(input, PreferredType) {
-                        switch (Type(input)) {
-                          case 0:
-                          case 1:
-                          case 2:
-                          case 3:
-                          case 4:
-                          case 5:
-                            return input;
-                        }
-                        var hint = 3 === PreferredType ? "string" : 5 === PreferredType ? "number" : "default", exoticToPrim = GetMethod(input, toPrimitiveSymbol);
-                        if (void 0 !== exoticToPrim) {
-                            var result = exoticToPrim.call(input, hint);
-                            if (IsObject(result)) throw new TypeError;
-                            return result;
-                        }
-                        return OrdinaryToPrimitive(input, "default" === hint ? "number" : hint);
-                    }
-                    function OrdinaryToPrimitive(O, hint) {
-                        if ("string" === hint) {
-                            var toString_1 = O.toString;
-                            if (IsCallable(toString_1)) if (!IsObject(result = toString_1.call(O))) return result;
-                            if (IsCallable(valueOf = O.valueOf)) if (!IsObject(result = valueOf.call(O))) return result;
-                        } else {
-                            var valueOf;
-                            if (IsCallable(valueOf = O.valueOf)) if (!IsObject(result = valueOf.call(O))) return result;
-                            var result, toString_2 = O.toString;
-                            if (IsCallable(toString_2)) if (!IsObject(result = toString_2.call(O))) return result;
-                        }
-                        throw new TypeError;
-                    }
-                    function ToBoolean(argument) {
-                        return !!argument;
-                    }
-                    function ToString(argument) {
-                        return "" + argument;
-                    }
-                    function ToPropertyKey(argument) {
-                        var key = ToPrimitive(argument, 3);
-                        return IsSymbol(key) ? key : ToString(key);
-                    }
-                    function IsArray(argument) {
-                        return Array.isArray ? Array.isArray(argument) : argument instanceof Object ? argument instanceof Array : "[object Array]" === Object.prototype.toString.call(argument);
-                    }
-                    function IsCallable(argument) {
-                        return "function" == typeof argument;
-                    }
-                    function IsConstructor(argument) {
-                        return "function" == typeof argument;
-                    }
-                    function IsPropertyKey(argument) {
-                        switch (Type(argument)) {
-                          case 3:
-                          case 4:
-                            return !0;
-
-                          default:
-                            return !1;
-                        }
-                    }
-                    function GetMethod(V, P) {
-                        var func = V[P];
-                        if (null != func) {
-                            if (!IsCallable(func)) throw new TypeError;
-                            return func;
-                        }
-                    }
-                    function GetIterator(obj) {
-                        var method = GetMethod(obj, iteratorSymbol);
-                        if (!IsCallable(method)) throw new TypeError;
-                        var iterator = method.call(obj);
-                        if (!IsObject(iterator)) throw new TypeError;
-                        return iterator;
-                    }
-                    function IteratorValue(iterResult) {
-                        return iterResult.value;
-                    }
-                    function IteratorStep(iterator) {
-                        var result = iterator.next();
-                        return !result.done && result;
-                    }
-                    function IteratorClose(iterator) {
-                        var f = iterator.return;
-                        f && f.call(iterator);
-                    }
-                    function OrdinaryGetPrototypeOf(O) {
-                        var proto = Object.getPrototypeOf(O);
-                        if ("function" != typeof O || O === functionPrototype) return proto;
-                        if (proto !== functionPrototype) return proto;
-                        var prototype = O.prototype, prototypeProto = prototype && Object.getPrototypeOf(prototype);
-                        if (null == prototypeProto || prototypeProto === Object.prototype) return proto;
-                        var constructor = prototypeProto.constructor;
-                        return "function" != typeof constructor || constructor === O ? proto : constructor;
-                    }
-                    function CreateMapPolyfill() {
-                        var cacheSentinel = {}, arraySentinel = [], MapIterator = function() {
-                            function MapIterator(keys, values, selector) {
-                                this._index = 0, this._keys = keys, this._values = values, this._selector = selector;
-                            }
-                            return MapIterator.prototype["@@iterator"] = function() {
-                                return this;
-                            }, MapIterator.prototype[iteratorSymbol] = function() {
-                                return this;
-                            }, MapIterator.prototype.next = function() {
-                                var index = this._index;
-                                if (index >= 0 && index < this._keys.length) {
-                                    var result = this._selector(this._keys[index], this._values[index]);
-                                    return index + 1 >= this._keys.length ? (this._index = -1, this._keys = arraySentinel, 
-                                    this._values = arraySentinel) : this._index++, {
-                                        value: result,
-                                        done: !1
-                                    };
-                                }
-                                return {
-                                    value: void 0,
-                                    done: !0
-                                };
-                            }, MapIterator.prototype.throw = function(error) {
-                                throw this._index >= 0 && (this._index = -1, this._keys = arraySentinel, this._values = arraySentinel), 
-                                error;
-                            }, MapIterator.prototype.return = function(value) {
-                                return this._index >= 0 && (this._index = -1, this._keys = arraySentinel, this._values = arraySentinel), 
-                                {
-                                    value: value,
-                                    done: !0
-                                };
-                            }, MapIterator;
-                        }();
-                        return function() {
-                            function Map() {
-                                this._keys = [], this._values = [], this._cacheKey = cacheSentinel, this._cacheIndex = -2;
-                            }
-                            return Object.defineProperty(Map.prototype, "size", {
-                                get: function() {
-                                    return this._keys.length;
-                                },
-                                enumerable: !0,
-                                configurable: !0
-                            }), Map.prototype.has = function(key) {
-                                return this._find(key, !1) >= 0;
-                            }, Map.prototype.get = function(key) {
-                                var index = this._find(key, !1);
-                                return index >= 0 ? this._values[index] : void 0;
-                            }, Map.prototype.set = function(key, value) {
-                                var index = this._find(key, !0);
-                                return this._values[index] = value, this;
-                            }, Map.prototype.delete = function(key) {
-                                var index = this._find(key, !1);
-                                if (index >= 0) {
-                                    for (var size = this._keys.length, i = index + 1; i < size; i++) this._keys[i - 1] = this._keys[i], 
-                                    this._values[i - 1] = this._values[i];
-                                    return this._keys.length--, this._values.length--, key === this._cacheKey && (this._cacheKey = cacheSentinel, 
-                                    this._cacheIndex = -2), !0;
-                                }
-                                return !1;
-                            }, Map.prototype.clear = function() {
-                                this._keys.length = 0, this._values.length = 0, this._cacheKey = cacheSentinel, 
-                                this._cacheIndex = -2;
-                            }, Map.prototype.keys = function() {
-                                return new MapIterator(this._keys, this._values, getKey);
-                            }, Map.prototype.values = function() {
-                                return new MapIterator(this._keys, this._values, getValue);
-                            }, Map.prototype.entries = function() {
-                                return new MapIterator(this._keys, this._values, getEntry);
-                            }, Map.prototype["@@iterator"] = function() {
-                                return this.entries();
-                            }, Map.prototype[iteratorSymbol] = function() {
-                                return this.entries();
-                            }, Map.prototype._find = function(key, insert) {
-                                return this._cacheKey !== key && (this._cacheIndex = this._keys.indexOf(this._cacheKey = key)), 
-                                this._cacheIndex < 0 && insert && (this._cacheIndex = this._keys.length, this._keys.push(key), 
-                                this._values.push(void 0)), this._cacheIndex;
-                            }, Map;
-                        }();
-                        function getKey(key, _) {
-                            return key;
-                        }
-                        function getValue(_, value) {
-                            return value;
-                        }
-                        function getEntry(key, value) {
-                            return [ key, value ];
-                        }
-                    }
-                    function CreateSetPolyfill() {
-                        return function() {
-                            function Set() {
-                                this._map = new _Map;
-                            }
-                            return Object.defineProperty(Set.prototype, "size", {
-                                get: function() {
-                                    return this._map.size;
-                                },
-                                enumerable: !0,
-                                configurable: !0
-                            }), Set.prototype.has = function(value) {
-                                return this._map.has(value);
-                            }, Set.prototype.add = function(value) {
-                                return this._map.set(value, value), this;
-                            }, Set.prototype.delete = function(value) {
-                                return this._map.delete(value);
-                            }, Set.prototype.clear = function() {
-                                this._map.clear();
-                            }, Set.prototype.keys = function() {
-                                return this._map.keys();
-                            }, Set.prototype.values = function() {
-                                return this._map.values();
-                            }, Set.prototype.entries = function() {
-                                return this._map.entries();
-                            }, Set.prototype["@@iterator"] = function() {
-                                return this.keys();
-                            }, Set.prototype[iteratorSymbol] = function() {
-                                return this.keys();
-                            }, Set;
-                        }();
-                    }
-                    function CreateWeakMapPolyfill() {
-                        var UUID_SIZE = 16, keys = HashMap.create(), rootKey = CreateUniqueKey();
-                        return function() {
-                            function WeakMap() {
-                                this._key = CreateUniqueKey();
-                            }
-                            return WeakMap.prototype.has = function(target) {
-                                var table = GetOrCreateWeakMapTable(target, !1);
-                                return void 0 !== table && HashMap.has(table, this._key);
-                            }, WeakMap.prototype.get = function(target) {
-                                var table = GetOrCreateWeakMapTable(target, !1);
-                                return void 0 !== table ? HashMap.get(table, this._key) : void 0;
-                            }, WeakMap.prototype.set = function(target, value) {
-                                return GetOrCreateWeakMapTable(target, !0)[this._key] = value, this;
-                            }, WeakMap.prototype.delete = function(target) {
-                                var table = GetOrCreateWeakMapTable(target, !1);
-                                return void 0 !== table && delete table[this._key];
-                            }, WeakMap.prototype.clear = function() {
-                                this._key = CreateUniqueKey();
-                            }, WeakMap;
-                        }();
-                        function CreateUniqueKey() {
-                            var key;
-                            do {
-                                key = "@@WeakMap@@" + CreateUUID();
-                            } while (HashMap.has(keys, key));
-                            return keys[key] = !0, key;
-                        }
-                        function GetOrCreateWeakMapTable(target, create) {
-                            if (!hasOwn.call(target, rootKey)) {
-                                if (!create) return;
-                                Object.defineProperty(target, rootKey, {
-                                    value: HashMap.create()
-                                });
-                            }
-                            return target[rootKey];
-                        }
-                        function FillRandomBytes(buffer, size) {
-                            for (var i = 0; i < size; ++i) buffer[i] = 255 * Math.random() | 0;
-                            return buffer;
-                        }
-                        function GenRandomBytes(size) {
-                            return "function" == typeof Uint8Array ? "undefined" != typeof crypto ? crypto.getRandomValues(new Uint8Array(size)) : "undefined" != typeof msCrypto ? msCrypto.getRandomValues(new Uint8Array(size)) : FillRandomBytes(new Uint8Array(size), size) : FillRandomBytes(new Array(size), size);
-                        }
-                        function CreateUUID() {
-                            var data = GenRandomBytes(UUID_SIZE);
-                            data[6] = 79 & data[6] | 64, data[8] = 191 & data[8] | 128;
-                            for (var result = "", offset = 0; offset < UUID_SIZE; ++offset) {
-                                var byte = data[offset];
-                                4 !== offset && 6 !== offset && 8 !== offset || (result += "-"), byte < 16 && (result += "0"), 
-                                result += byte.toString(16).toLowerCase();
-                            }
-                            return result;
-                        }
-                    }
-                    function MakeDictionary(obj) {
-                        return obj.__ = void 0, delete obj.__, obj;
-                    }
-                    exporter("decorate", decorate), exporter("metadata", metadata), exporter("defineMetadata", defineMetadata), 
-                    exporter("hasMetadata", hasMetadata), exporter("hasOwnMetadata", hasOwnMetadata), 
-                    exporter("getMetadata", getMetadata), exporter("getOwnMetadata", getOwnMetadata), 
-                    exporter("getMetadataKeys", getMetadataKeys), exporter("getOwnMetadataKeys", getOwnMetadataKeys), 
-                    exporter("deleteMetadata", deleteMetadata);
-                }(exporter);
-            }();
-        }(Reflect || (Reflect = {}));
-    }).call(this, __webpack_require__(15), __webpack_require__(16));
-}, function(module, exports) {
-    var cachedSetTimeout, cachedClearTimeout, process = module.exports = {};
-    function defaultSetTimout() {
-        throw new Error("setTimeout has not been defined");
-    }
-    function defaultClearTimeout() {
-        throw new Error("clearTimeout has not been defined");
-    }
-    function runTimeout(fun) {
-        if (cachedSetTimeout === setTimeout) return setTimeout(fun, 0);
-        if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) return cachedSetTimeout = setTimeout, 
-        setTimeout(fun, 0);
-        try {
-            return cachedSetTimeout(fun, 0);
-        } catch (e) {
-            try {
-                return cachedSetTimeout.call(null, fun, 0);
-            } catch (e) {
-                return cachedSetTimeout.call(this, fun, 0);
-            }
-        }
-    }
-    !function() {
-        try {
-            cachedSetTimeout = "function" == typeof setTimeout ? setTimeout : defaultSetTimout;
-        } catch (e) {
-            cachedSetTimeout = defaultSetTimout;
-        }
-        try {
-            cachedClearTimeout = "function" == typeof clearTimeout ? clearTimeout : defaultClearTimeout;
-        } catch (e) {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    }();
-    var currentQueue, queue = [], draining = !1, queueIndex = -1;
-    function cleanUpNextTick() {
-        draining && currentQueue && (draining = !1, currentQueue.length ? queue = currentQueue.concat(queue) : queueIndex = -1, 
-        queue.length && drainQueue());
-    }
-    function drainQueue() {
-        if (!draining) {
-            var timeout = runTimeout(cleanUpNextTick);
-            draining = !0;
-            for (var len = queue.length; len; ) {
-                for (currentQueue = queue, queue = []; ++queueIndex < len; ) currentQueue && currentQueue[queueIndex].run();
-                queueIndex = -1, len = queue.length;
-            }
-            currentQueue = null, draining = !1, function runClearTimeout(marker) {
-                if (cachedClearTimeout === clearTimeout) return clearTimeout(marker);
-                if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) return cachedClearTimeout = clearTimeout, 
-                clearTimeout(marker);
-                try {
-                    return cachedClearTimeout(marker);
-                } catch (e) {
-                    try {
-                        return cachedClearTimeout.call(null, marker);
-                    } catch (e) {
-                        return cachedClearTimeout.call(this, marker);
-                    }
-                }
-            }(timeout);
-        }
-    }
-    function Item(fun, array) {
-        this.fun = fun, this.array = array;
-    }
-    function noop() {}
-    process.nextTick = function(fun) {
-        var args = new Array(arguments.length - 1);
-        if (arguments.length > 1) for (var i = 1; i < arguments.length; i++) args[i - 1] = arguments[i];
-        queue.push(new Item(fun, args)), 1 !== queue.length || draining || runTimeout(drainQueue);
-    }, Item.prototype.run = function() {
-        this.fun.apply(null, this.array);
-    }, process.title = "browser", process.browser = !0, process.env = {}, process.argv = [], 
-    process.version = "", process.versions = {}, process.on = noop, process.addListener = noop, 
-    process.once = noop, process.off = noop, process.removeListener = noop, process.removeAllListeners = noop, 
-    process.emit = noop, process.prependListener = noop, process.prependOnceListener = noop, 
-    process.listeners = function(name) {
-        return [];
-    }, process.binding = function(name) {
-        throw new Error("process.binding is not supported");
-    }, process.cwd = function() {
-        return "/";
-    }, process.chdir = function(dir) {
-        throw new Error("process.chdir is not supported");
-    }, process.umask = function() {
-        return 0;
-    };
-}, function(module, exports) {
-    var g;
-    g = function() {
-        return this;
-    }();
-    try {
-        g = g || new Function("return this")();
-    } catch (e) {
-        "object" == typeof window && (g = window);
-    }
-    module.exports = g;
+    var Container_1 = __webpack_require__(4), home_1 = __webpack_require__(14);
+    Container_1.Container.register(home_1.PaiPaiHelper).Init();
 }, function(module, exports, __webpack_require__) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
@@ -1620,7 +1100,7 @@
     }), exports.PaiPaiHelper = void 0;
     var Container_1 = __webpack_require__(4), Logger_1 = __webpack_require__(0), BaiDuPanParse_1 = __webpack_require__(5), PaiPaiHelper = function() {
         function PaiPaiHelper() {
-            this.plugins = new Array, this.plugins = [ Container_1.Container.Require(BaiDuPanParse_1.BaiDuPanParse) ], 
+            this.plugins = new Array, this.plugins = [ Container_1.Container.register(BaiDuPanParse_1.BaiDuPanParse) ], 
             Logger_1.Logger.info("container loaded");
         }
         return PaiPaiHelper.prototype.Init = function() {
@@ -1731,8 +1211,8 @@
     Object.defineProperty(exports, "__esModule", {
         value: !0
     }), exports.Alert = void 0;
-    var sweetalert2_1 = __importDefault(__webpack_require__(24));
-    __webpack_require__(25), __webpack_require__(26);
+    var sweetalert2_1 = __importDefault(__webpack_require__(21));
+    __webpack_require__(22), __webpack_require__(23);
     var Alert = function() {
         function Alert() {}
         return Alert.confirm = function(msg, confirmTxt, cancelTxt) {
