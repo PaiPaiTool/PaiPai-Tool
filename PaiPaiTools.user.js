@@ -2909,7 +2909,7 @@
     }(0, (function() {
         return function() {
             var __webpack_modules__ = {
-                134: function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+                686: function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
                     "use strict";
                     __webpack_require__.d(__webpack_exports__, {
                         default: function() {
@@ -2917,6 +2917,36 @@
                         }
                     });
                     var tiny_emitter = __webpack_require__(279), tiny_emitter_default = __webpack_require__.n(tiny_emitter), listen = __webpack_require__(370), listen_default = __webpack_require__.n(listen), src_select = __webpack_require__(817), select_default = __webpack_require__.n(src_select);
+                    function command(type) {
+                        try {
+                            return document.execCommand(type);
+                        } catch (err) {
+                            return !1;
+                        }
+                    }
+                    var actions_cut = function ClipboardActionCut(target) {
+                        var selectedText = select_default()(target);
+                        return command("cut"), selectedText;
+                    };
+                    function createFakeElement(value) {
+                        var isRTL = "rtl" === document.documentElement.getAttribute("dir"), fakeElement = document.createElement("textarea");
+                        fakeElement.style.fontSize = "12pt", fakeElement.style.border = "0", fakeElement.style.padding = "0", 
+                        fakeElement.style.margin = "0", fakeElement.style.position = "absolute", fakeElement.style[isRTL ? "right" : "left"] = "-9999px";
+                        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+                        return fakeElement.style.top = "".concat(yPosition, "px"), fakeElement.setAttribute("readonly", ""), 
+                        fakeElement.value = value, fakeElement;
+                    }
+                    var actions_copy = function ClipboardActionCopy(target) {
+                        var options = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {
+                            container: document.body
+                        }, selectedText = "";
+                        if ("string" == typeof target) {
+                            var fakeElement = createFakeElement(target);
+                            options.container.appendChild(fakeElement), selectedText = select_default()(fakeElement), 
+                            command("copy"), fakeElement.remove();
+                        } else selectedText = select_default()(target), command("copy");
+                        return selectedText;
+                    };
                     function _typeof(obj) {
                         return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function _typeof(obj) {
                             return typeof obj;
@@ -2924,123 +2954,20 @@
                             return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
                         }, _typeof(obj);
                     }
-                    function _defineProperties(target, props) {
-                        for (var i = 0; i < props.length; i++) {
-                            var descriptor = props[i];
-                            descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, 
-                            "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
+                    var actions_default = function ClipboardActionDefault() {
+                        var options = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, _options$action = options.action, action = void 0 === _options$action ? "copy" : _options$action, container = options.container, target = options.target, text = options.text;
+                        if ("copy" !== action && "cut" !== action) throw new Error('Invalid "action" value, use either "copy" or "cut"');
+                        if (void 0 !== target) {
+                            if (!target || "object" !== _typeof(target) || 1 !== target.nodeType) throw new Error('Invalid "target" value, use a valid Element');
+                            if ("copy" === action && target.hasAttribute("disabled")) throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
+                            if ("cut" === action && (target.hasAttribute("readonly") || target.hasAttribute("disabled"))) throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');
                         }
-                    }
-                    var ClipboardAction = function() {
-                        function ClipboardAction(options) {
-                            !function _classCallCheck(instance, Constructor) {
-                                if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
-                            }(this, ClipboardAction), this.resolveOptions(options), this.initSelection();
-                        }
-                        return function _createClass(Constructor, protoProps, staticProps) {
-                            return protoProps && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
-                            Constructor;
-                        }(ClipboardAction, [ {
-                            key: "resolveOptions",
-                            value: function resolveOptions() {
-                                var options = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
-                                this.action = options.action, this.container = options.container, this.emitter = options.emitter, 
-                                this.target = options.target, this.text = options.text, this.trigger = options.trigger, 
-                                this.selectedText = "";
-                            }
-                        }, {
-                            key: "initSelection",
-                            value: function initSelection() {
-                                this.text ? this.selectFake() : this.target && this.selectTarget();
-                            }
-                        }, {
-                            key: "createFakeElement",
-                            value: function createFakeElement() {
-                                var isRTL = "rtl" === document.documentElement.getAttribute("dir");
-                                this.fakeElem = document.createElement("textarea"), this.fakeElem.style.fontSize = "12pt", 
-                                this.fakeElem.style.border = "0", this.fakeElem.style.padding = "0", this.fakeElem.style.margin = "0", 
-                                this.fakeElem.style.position = "absolute", this.fakeElem.style[isRTL ? "right" : "left"] = "-9999px";
-                                var yPosition = window.pageYOffset || document.documentElement.scrollTop;
-                                return this.fakeElem.style.top = "".concat(yPosition, "px"), this.fakeElem.setAttribute("readonly", ""), 
-                                this.fakeElem.value = this.text, this.fakeElem;
-                            }
-                        }, {
-                            key: "selectFake",
-                            value: function selectFake() {
-                                var _this = this, fakeElem = this.createFakeElement();
-                                this.fakeHandlerCallback = function() {
-                                    return _this.removeFake();
-                                }, this.fakeHandler = this.container.addEventListener("click", this.fakeHandlerCallback) || !0, 
-                                this.container.appendChild(fakeElem), this.selectedText = select_default()(fakeElem), 
-                                this.copyText(), this.removeFake();
-                            }
-                        }, {
-                            key: "removeFake",
-                            value: function removeFake() {
-                                this.fakeHandler && (this.container.removeEventListener("click", this.fakeHandlerCallback), 
-                                this.fakeHandler = null, this.fakeHandlerCallback = null), this.fakeElem && (this.container.removeChild(this.fakeElem), 
-                                this.fakeElem = null);
-                            }
-                        }, {
-                            key: "selectTarget",
-                            value: function selectTarget() {
-                                this.selectedText = select_default()(this.target), this.copyText();
-                            }
-                        }, {
-                            key: "copyText",
-                            value: function copyText() {
-                                var succeeded;
-                                try {
-                                    succeeded = document.execCommand(this.action);
-                                } catch (err) {
-                                    succeeded = !1;
-                                }
-                                this.handleResult(succeeded);
-                            }
-                        }, {
-                            key: "handleResult",
-                            value: function handleResult(succeeded) {
-                                this.emitter.emit(succeeded ? "success" : "error", {
-                                    action: this.action,
-                                    text: this.selectedText,
-                                    trigger: this.trigger,
-                                    clearSelection: this.clearSelection.bind(this)
-                                });
-                            }
-                        }, {
-                            key: "clearSelection",
-                            value: function clearSelection() {
-                                this.trigger && this.trigger.focus(), document.activeElement.blur(), window.getSelection().removeAllRanges();
-                            }
-                        }, {
-                            key: "destroy",
-                            value: function destroy() {
-                                this.removeFake();
-                            }
-                        }, {
-                            key: "action",
-                            set: function set() {
-                                var action = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "copy";
-                                if (this._action = action, "copy" !== this._action && "cut" !== this._action) throw new Error('Invalid "action" value, use either "copy" or "cut"');
-                            },
-                            get: function get() {
-                                return this._action;
-                            }
-                        }, {
-                            key: "target",
-                            set: function set(target) {
-                                if (void 0 !== target) {
-                                    if (!target || "object" !== _typeof(target) || 1 !== target.nodeType) throw new Error('Invalid "target" value, use a valid Element');
-                                    if ("copy" === this.action && target.hasAttribute("disabled")) throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
-                                    if ("cut" === this.action && (target.hasAttribute("readonly") || target.hasAttribute("disabled"))) throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');
-                                    this._target = target;
-                                }
-                            },
-                            get: function get() {
-                                return this._target;
-                            }
-                        } ]), ClipboardAction;
-                    }(), clipboard_action = ClipboardAction;
+                        return text ? actions_copy(text, {
+                            container: container
+                        }) : target ? "cut" === action ? actions_cut(target) : actions_copy(target, {
+                            container: container
+                        }) : void 0;
+                    };
                     function clipboard_typeof(obj) {
                         return clipboard_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function _typeof(obj) {
                             return typeof obj;
@@ -3048,7 +2975,7 @@
                             return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
                         }, clipboard_typeof(obj);
                     }
-                    function clipboard_defineProperties(target, props) {
+                    function _defineProperties(target, props) {
                         for (var i = 0; i < props.length; i++) {
                             var descriptor = props[i];
                             descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, 
@@ -3110,14 +3037,14 @@
                         var _super = _createSuper(Clipboard);
                         function Clipboard(trigger, options) {
                             var _this;
-                            return function clipboard_classCallCheck(instance, Constructor) {
+                            return function _classCallCheck(instance, Constructor) {
                                 if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
                             }(this, Clipboard), (_this = _super.call(this)).resolveOptions(options), _this.listenClick(trigger), 
                             _this;
                         }
-                        return function clipboard_createClass(Constructor, protoProps, staticProps) {
-                            return protoProps && clipboard_defineProperties(Constructor.prototype, protoProps), 
-                            staticProps && clipboard_defineProperties(Constructor, staticProps), Constructor;
+                        return function _createClass(Constructor, protoProps, staticProps) {
+                            return protoProps && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
+                            Constructor;
                         }(Clipboard, [ {
                             key: "resolveOptions",
                             value: function resolveOptions() {
@@ -3138,14 +3065,19 @@
                         }, {
                             key: "onClick",
                             value: function onClick(e) {
-                                var trigger = e.delegateTarget || e.currentTarget;
-                                this.clipboardAction && (this.clipboardAction = null), this.clipboardAction = new clipboard_action({
+                                var trigger = e.delegateTarget || e.currentTarget, selectedText = actions_default({
                                     action: this.action(trigger),
-                                    target: this.target(trigger),
-                                    text: this.text(trigger),
                                     container: this.container,
+                                    target: this.target(trigger),
+                                    text: this.text(trigger)
+                                });
+                                this.emit(selectedText ? "success" : "error", {
+                                    action: this.action,
+                                    text: selectedText,
                                     trigger: trigger,
-                                    emitter: this
+                                    clearSelection: function clearSelection() {
+                                        trigger && trigger.focus(), document.activeElement.blur(), window.getSelection().removeAllRanges();
+                                    }
                                 });
                             }
                         }, {
@@ -3167,10 +3099,22 @@
                         }, {
                             key: "destroy",
                             value: function destroy() {
-                                this.listener.destroy(), this.clipboardAction && (this.clipboardAction.destroy(), 
-                                this.clipboardAction = null);
+                                this.listener.destroy();
                             }
                         } ], [ {
+                            key: "copy",
+                            value: function copy(target) {
+                                var options = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {
+                                    container: document.body
+                                };
+                                return actions_copy(target, options);
+                            }
+                        }, {
+                            key: "cut",
+                            value: function cut(target) {
+                                return actions_cut(target);
+                            }
+                        }, {
                             key: "isSupported",
                             value: function isSupported() {
                                 var action = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : [ "copy", "cut" ], actions = "string" == typeof action ? [ action ] : action, support = !!document.queryCommandSupported;
@@ -3326,7 +3270,7 @@
                 });
             }, __webpack_require__.o = function(obj, prop) {
                 return Object.prototype.hasOwnProperty.call(obj, prop);
-            }, __webpack_require__(134);
+            }, __webpack_require__(686);
         }().default;
     }));
 }, function(module, exports, __webpack_require__) {
