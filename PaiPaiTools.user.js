@@ -3065,15 +3065,15 @@
                         }, {
                             key: "onClick",
                             value: function onClick(e) {
-                                var trigger = e.delegateTarget || e.currentTarget, selectedText = actions_default({
-                                    action: this.action(trigger),
+                                var trigger = e.delegateTarget || e.currentTarget, action = this.action(trigger) || "copy", text = actions_default({
+                                    action: action,
                                     container: this.container,
                                     target: this.target(trigger),
                                     text: this.text(trigger)
                                 });
-                                this.emit(selectedText ? "success" : "error", {
-                                    action: this.action,
-                                    text: selectedText,
+                                this.emit(text ? "success" : "error", {
+                                    action: action,
+                                    text: text,
                                     trigger: trigger,
                                     clearSelection: function clearSelection() {
                                         trigger && trigger.focus(), document.activeElement.blur(), window.getSelection().removeAllRanges();
