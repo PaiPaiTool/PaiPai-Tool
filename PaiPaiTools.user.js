@@ -3,7 +3,7 @@
 // @namespace      https://www.pai.ci
 // @description    【2022/01/19稳定奔放速度拉满】简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.1.0
+// @version        1.2.0
 // @author         paipai
 // @source         https://www.pai.ci
 // @include        *://*
@@ -428,7 +428,8 @@
             };
             return Ele_1.Ele.Button("PanToolsDown", "u-btn nd-common-btn nd-file-list-toolbar-action-item is-need-left-sep u-btn--normal u-btn--medium u-btn--default is-has-icon", [ btn.html() ]);
         }, BaiDuPanParse.initDownFileNew = function() {
-            Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u65b0\u7248\u9875\u9762,\u8bf7\u8fd4\u56de\u65e7\u7248\u5217\u8868\u4f7f\u7528\u89e3\u6790");
+            var fileList = document.querySelector(".nd-main-list").__vue__.selectedList;
+            Logger_1.Logger.debug(fileList), null != fileList && 0 != (null == fileList ? void 0 : fileList.length) ? BaiDuPanParse.isMultipleFile(fileList) && BaiDuPanParse.isDirFile(fileList) ? Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u6587\u4ef6\u5939\u89e3\u6790!", 3, "error") : (null == fileList ? void 0 : fileList.length) > 20 ? Alert_1.Alert.info("\u9009\u62e9\u6587\u4ef6\u8fc7\u591a,\u8bf7\u9009\u62e920\u4e2a\u4ee5\u5185\u7684\u6587\u4ef6\u8fdb\u884c\u89e3\u6790", 3, "error") : BaiDuPanParse.isMultipleFile(fileList) ? BaiDuPanParse.initMultipleDownFile(fileList) : BaiDuPanParse.initSingleDownFile(fileList[0]) : Alert_1.Alert.info("\u8fd8\u6ca1\u9009\u6587\u4ef6\u54e6~", 3, "warning");
         }, BaiDuPanParse.initDownFile = function() {
             var fileList = BaiDuPanParse.getSelectedFileListHome();
             Logger_1.Logger.debug(fileList), null != fileList && 0 != (null == fileList ? void 0 : fileList.length) ? BaiDuPanParse.isMultipleFile(fileList) && BaiDuPanParse.isDirFile(fileList) ? Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u6587\u4ef6\u5939\u89e3\u6790!", 3, "error") : (null == fileList ? void 0 : fileList.length) > 20 ? Alert_1.Alert.info("\u9009\u62e9\u6587\u4ef6\u8fc7\u591a,\u8bf7\u9009\u62e920\u4e2a\u4ee5\u5185\u7684\u6587\u4ef6\u8fdb\u884c\u89e3\u6790", 3, "error") : BaiDuPanParse.isMultipleFile(fileList) ? BaiDuPanParse.initMultipleDownFile(fileList) : BaiDuPanParse.initSingleDownFile(fileList[0]) : Alert_1.Alert.info("\u8fd8\u6ca1\u9009\u6587\u4ef6\u54e6~", 3, "warning");
