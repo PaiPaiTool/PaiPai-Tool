@@ -502,7 +502,7 @@
                             return __generator(this, (function(_b) {
                                 switch (_b.label) {
                                   case 0:
-                                    return Logger_1.Logger.debug(pan), pan ? (_a = pan = pan, [ 4, BaiduRoutes_1.BaiduRoutes.getUk() ]) : [ 3, 2 ];
+                                    return Logger_1.Logger.debug(pan), pan ? (_a = pan, [ 4, BaiduRoutes_1.BaiduRoutes.getUk() ]) : [ 3, 2 ];
 
                                   case 1:
                                     return _a.uk = _b.sent().uk, BaiDuPanParse.getParseUrlV2(pan).then((function(panFile) {
@@ -633,7 +633,7 @@
                         return __generator(this, (function(_b) {
                             switch (_b.label) {
                               case 0:
-                                return Logger_1.Logger.debug(pan), pan ? (_a = pan = pan, [ 4, BaiduRoutes_1.BaiduRoutes.getUk() ]) : [ 3, 2 ];
+                                return Logger_1.Logger.debug(pan), pan ? (_a = pan, [ 4, BaiduRoutes_1.BaiduRoutes.getUk() ]) : [ 3, 2 ];
 
                               case 1:
                                 return _a.uk = _b.sent().uk, BaiDuPanParse.getParseUrlV2(pan).then((function(panFile) {
