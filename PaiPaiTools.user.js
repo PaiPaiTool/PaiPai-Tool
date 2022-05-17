@@ -3071,24 +3071,24 @@
                         var selectedText = select_default()(target);
                         return command("cut"), selectedText;
                     };
-                    function createFakeElement(value) {
-                        var isRTL = "rtl" === document.documentElement.getAttribute("dir"), fakeElement = document.createElement("textarea");
-                        fakeElement.style.fontSize = "12pt", fakeElement.style.border = "0", fakeElement.style.padding = "0", 
-                        fakeElement.style.margin = "0", fakeElement.style.position = "absolute", fakeElement.style[isRTL ? "right" : "left"] = "-9999px";
-                        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
-                        return fakeElement.style.top = "".concat(yPosition, "px"), fakeElement.setAttribute("readonly", ""), 
-                        fakeElement.value = value, fakeElement;
-                    }
-                    var actions_copy = function ClipboardActionCopy(target) {
+                    var fakeCopyAction = function fakeCopyAction(value, options) {
+                        var fakeElement = function createFakeElement(value) {
+                            var isRTL = "rtl" === document.documentElement.getAttribute("dir"), fakeElement = document.createElement("textarea");
+                            fakeElement.style.fontSize = "12pt", fakeElement.style.border = "0", fakeElement.style.padding = "0", 
+                            fakeElement.style.margin = "0", fakeElement.style.position = "absolute", fakeElement.style[isRTL ? "right" : "left"] = "-9999px";
+                            var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+                            return fakeElement.style.top = "".concat(yPosition, "px"), fakeElement.setAttribute("readonly", ""), 
+                            fakeElement.value = value, fakeElement;
+                        }(value);
+                        options.container.appendChild(fakeElement);
+                        var selectedText = select_default()(fakeElement);
+                        return command("copy"), fakeElement.remove(), selectedText;
+                    }, actions_copy = function ClipboardActionCopy(target) {
                         var options = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {
                             container: document.body
                         }, selectedText = "";
-                        if ("string" == typeof target) {
-                            var fakeElement = createFakeElement(target);
-                            options.container.appendChild(fakeElement), selectedText = select_default()(fakeElement), 
-                            command("copy"), fakeElement.remove();
-                        } else selectedText = select_default()(target), command("copy");
-                        return selectedText;
+                        return "string" == typeof target ? selectedText = fakeCopyAction(target, options) : target instanceof HTMLInputElement && ![ "text", "search", "url", "tel", "password" ].includes(null == target ? void 0 : target.type) ? selectedText = fakeCopyAction(target.value, options) : (selectedText = select_default()(target), 
+                        command("copy")), selectedText;
                     };
                     function _typeof(obj) {
                         return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function _typeof(obj) {
@@ -3219,7 +3219,7 @@
                                     text: text,
                                     trigger: trigger,
                                     clearSelection: function clearSelection() {
-                                        trigger && trigger.focus(), document.activeElement.blur(), window.getSelection().removeAllRanges();
+                                        trigger && trigger.focus(), window.getSelection().removeAllRanges();
                                     }
                                 });
                             }
