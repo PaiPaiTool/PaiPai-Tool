@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           【派派助手】百度网盘工具箱直链解析 ——持续更新
 // @namespace      https://www.pai.ci
-// @description    【2022/01/19稳定奔放速度拉满】简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
+// @description    【2022/08/20稳定奔放速度拉满】简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
 // @version        1.4.0
 // @author         paipai
