@@ -3,7 +3,7 @@
 // @namespace      https://www.pai.ci
 // @description    【2022/01/19稳定奔放速度拉满】简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.3.0
+// @version        1.4.0
 // @author         paipai
 // @source         https://www.pai.ci
 // @include        *://*
@@ -359,7 +359,7 @@
     Object.defineProperty(exports, "__esModule", {
         value: !0
     }), exports.BaiDuPanParse = void 0;
-    var AppBase_1 = __webpack_require__(17), SiteEnum_1 = __webpack_require__(6), Ele_1 = __webpack_require__(19), EventEnum_1 = __webpack_require__(8), BaiDuPanFile_1 = __webpack_require__(20), Alert_1 = __webpack_require__(21), Logger_1 = __webpack_require__(0), PanInfo_1 = __webpack_require__(25), BaiduRoutes_1 = __webpack_require__(26), Common_1 = __webpack_require__(11), Config_1 = __webpack_require__(12), clipboard_1 = __importDefault(__webpack_require__(27)), Core_1 = __webpack_require__(7), AriaConfig_1 = __webpack_require__(28), Http_1 = __webpack_require__(10), mdui_1 = __importDefault(__webpack_require__(29)), BaiDuPanParse = function(_super) {
+    var AppBase_1 = __webpack_require__(17), SiteEnum_1 = __webpack_require__(6), Ele_1 = __webpack_require__(19), EventEnum_1 = __webpack_require__(8), BaiDuPanFile_1 = __webpack_require__(20), Alert_1 = __webpack_require__(21), Logger_1 = __webpack_require__(0), PanInfo_1 = __webpack_require__(25), BaiduRoutes_1 = __webpack_require__(26), Common_1 = __webpack_require__(11), Config_1 = __webpack_require__(12), clipboard_1 = __importDefault(__webpack_require__(27)), Core_1 = __webpack_require__(7), PanRes_1 = __webpack_require__(28), AriaConfig_1 = __webpack_require__(29), Http_1 = __webpack_require__(10), mdui_1 = __importDefault(__webpack_require__(30)), BaiDuPanParse = function(_super) {
         function BaiDuPanParse() {
             var _this = null !== _super && _super.apply(this, arguments) || this;
             return _this.appName = "\u7f51\u76d8\u89e3\u6790", _this.rules = new Map([ [ SiteEnum_1.SiteEnum.BD_DETAIL_OLD, /[pan|yun].baidu.com\/disk\/home/i ], [ SiteEnum_1.SiteEnum.BD_DETAIL_Share, /[pan|yun].baidu.com\/s\//i ], [ SiteEnum_1.SiteEnum.BD_DETAIL_NEW, /[pan|yun].baidu.com\/disk\/main/i ] ]), 
@@ -429,7 +429,7 @@
             return btnEle.setAttribute("style", "margin-right:8px"), btnEle;
         }, BaiDuPanParse.initDownFileNew = function() {
             var fileList = document.querySelector(".nd-main-list").__vue__.selectedList;
-            Logger_1.Logger.debug(fileList), null != fileList && 0 != (null == fileList ? void 0 : fileList.length) ? BaiDuPanParse.isMultipleFile(fileList) && BaiDuPanParse.isDirFile(fileList) ? Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u6587\u4ef6\u5939\u89e3\u6790!", 3, "error") : (null == fileList ? void 0 : fileList.length) > 20 ? Alert_1.Alert.info("\u9009\u62e9\u6587\u4ef6\u8fc7\u591a,\u8bf7\u9009\u62e920\u4e2a\u4ee5\u5185\u7684\u6587\u4ef6\u8fdb\u884c\u89e3\u6790", 3, "error") : BaiDuPanParse.isMultipleFile(fileList) ? BaiDuPanParse.initMultipleDownFile(fileList) : BaiDuPanParse.initSingleDownFile(fileList[0]) : Alert_1.Alert.info("\u8fd8\u6ca1\u9009\u6587\u4ef6\u54e6~", 3, "warning");
+            Logger_1.Logger.debug(fileList), null != fileList && 0 != (null == fileList ? void 0 : fileList.length) ? BaiDuPanParse.isMultipleFile(fileList) && BaiDuPanParse.isDirFile(fileList) ? Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u6587\u4ef6\u5939\u89e3\u6790!", 3, "error") : (null == fileList ? void 0 : fileList.length) > 1 ? Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u591a\u6587\u4ef6\u89e3\u6790", 3, "error") : BaiDuPanParse.isMultipleFile(fileList) ? BaiDuPanParse.initMultipleDownFile(fileList) : BaiDuPanParse.initSingleDownFile(fileList[0]) : Alert_1.Alert.info("\u8fd8\u6ca1\u9009\u6587\u4ef6\u54e6~", 3, "warning");
         }, BaiDuPanParse.initDownFile = function() {
             if (this._site != SiteEnum_1.SiteEnum.BD_DETAIL_Share) {
                 var fileList = BaiDuPanParse.getSelectedFileListHome();
@@ -629,41 +629,34 @@
             try {
                 BaiDuPanParse.shareFile(file).then((function(pan) {
                     return __awaiter(_this, void 0, void 0, (function() {
-                        var _a;
-                        return __generator(this, (function(_b) {
-                            switch (_b.label) {
+                        var obj, fileInfo, pcsInfo;
+                        return __generator(this, (function(_a) {
+                            switch (_a.label) {
                               case 0:
-                                return Logger_1.Logger.debug(pan), pan ? (_a = pan, [ 4, BaiduRoutes_1.BaiduRoutes.getUk() ]) : [ 3, 2 ];
+                                return pan ? (obj = new PanRes_1.ParserV3, [ 4, BaiduRoutes_1.BaiduRoutes.getShareList(pan.link.replace("https://pan.baidu.com/s/", ""), pan.pwd) ]) : [ 3, 3 ];
 
                               case 1:
-                                return _a.uk = _b.sent().uk, BaiDuPanParse.getParseUrlV2(pan).then((function(panFile) {
-                                    if (1 == panFile.code) BaiDuPanParse.log("\u89e3\u6790\u5b8c\u6210"), BaiDuPanParse.setUrl(panFile.data.dlink), 
-                                    BaiDuPanParse.setUserAgent(panFile.data.ua), BaiDuPanParse.setAria2(panFile.data.dlink, file.server_filename, panFile.data.ua); else {
-                                        var msg = "\u5185\u90e8\u9519\u8bef";
-                                        switch (panFile.code) {
-                                          case 240:
-                                            msg = "\u5361\u5bc6\u9519\u8bef";
-                                            break;
-
-                                          case 610:
-                                            msg = "\u76f4\u94fe\u83b7\u53d6\u5931\u8d25,\u8bf7\u7a0d\u540e\u91cd\u8bd5";
-                                        }
-                                        Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", msg).then((function() {}));
-                                    }
-                                })).catch((function(res) {
-                                    Logger_1.Logger.debug(res), res ? BaiDuPanParse.log("\u89e3\u6790\u5931\u8d25,\u8bf7\u91cd\u8bd5") : BaiDuPanParse.log("\u8bf7\u6c42\u8d85\u65f6,\u8bf7\u91cd\u8bd5");
-                                })), [ 3, 3 ];
+                                return fileInfo = _a.sent(), Logger_1.Logger.debug(fileInfo), [ 4, BaiduRoutes_1.BaiduRoutes.getShareFile(fileInfo.data.shareid, fileInfo.data.uk, fileInfo.data.list[0].fs_id) ];
 
                               case 2:
-                                BaiDuPanParse.log("\u672a\u77e5\u9519\u8bef"), _b.label = 3;
+                                return pcsInfo = _a.sent(), Logger_1.Logger.debug(pcsInfo), obj.uk = fileInfo.data.uk, 
+                                obj.shareid = fileInfo.data.shareid, obj.fid = fileInfo.data.list[0].fs_id, obj.sekey = fileInfo.data.seckey, 
+                                obj.PCSPath = window.btoa(pcsInfo.list[0].dlink.replace("http://d.pcs.baidu.com/file/", "").replace("?", "&")), 
+                                BaiduRoutes_1.BaiduRoutes.parserV3(obj).then((function(panFile) {
+                                    1 == panFile.code ? (BaiDuPanParse.log("\u89e3\u6790\u5b8c\u6210"), BaiDuPanParse.setUrl(panFile.data.dlink), 
+                                    BaiDuPanParse.setUserAgent(panFile.data.ua), BaiDuPanParse.setAria2(panFile.data.dlink, file.server_filename, panFile.data.ua)) : Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", panFile.msg).then((function() {}));
+                                })).catch((function(res) {
+                                    Logger_1.Logger.debug(res), res ? BaiDuPanParse.log("\u89e3\u6790\u5931\u8d25,\u8bf7\u91cd\u8bd5") : BaiDuPanParse.log("\u8bf7\u6c42\u8d85\u65f6,\u8bf7\u91cd\u8bd5");
+                                })), [ 3, 4 ];
 
                               case 3:
+                                BaiDuPanParse.log("\u672a\u77e5\u9519\u8bef"), _a.label = 4;
+
+                              case 4:
                                 return [ 2 ];
                             }
                         }));
                     }));
-                })).catch((function(res) {
-                    res ? BaiDuPanParse.log("\u89e3\u6790\u5931\u8d25,\u8bf7\u91cd\u8bd5") : BaiDuPanParse.log("\u8bf7\u6c42\u8d85\u65f6,\u8bf7\u91cd\u8bd5");
                 })), $("#paipai-parser").removeAttr("disabled");
             } catch (e) {
                 e ? BaiDuPanParse.log("\u89e3\u6790\u5931\u8d25,\u8bf7\u91cd\u8bd5") : BaiDuPanParse.log("\u8bf7\u6c42\u8d85\u65f6,\u8bf7\u91cd\u8bd5"), 
@@ -1320,7 +1313,7 @@
     "use strict";
     Object.defineProperty(exports, "__esModule", {
         value: !0
-    }), exports.SignDataRes = exports.SignRes = exports.PcsRes = exports.PcsInfo = exports.BaiDuPanFile = void 0;
+    }), exports.PanShareFileData = exports.PanShareXListRes = exports.PanShareListRes = exports.SignDataRes = exports.SignRes = exports.PcsRes = exports.PcsInfo = exports.BaiDuPanFile = void 0;
     var BaiDuPanFile = function BaiDuPanFile() {};
     exports.BaiDuPanFile = BaiDuPanFile;
     var PcsInfo = function PcsInfo() {};
@@ -1331,6 +1324,12 @@
     exports.SignRes = SignRes;
     var SignDataRes = function SignDataRes() {};
     exports.SignDataRes = SignDataRes;
+    var PanShareListRes = function PanShareListRes() {};
+    exports.PanShareListRes = PanShareListRes;
+    var PanShareXListRes = function PanShareXListRes() {};
+    exports.PanShareXListRes = PanShareXListRes;
+    var PanShareFileData = function PanShareFileData() {};
+    exports.PanShareFileData = PanShareFileData;
 }, function(module, exports, __webpack_require__) {
     "use strict";
     var __importDefault = this && this.__importDefault || function(mod) {
@@ -3025,9 +3024,20 @@
             data.set("period", 1), pwd.length > 0 && data.set("pwd", pwd), Http_1.Http.post("https://pan.baidu.com/share/set?clienttype=8", data, "formdata");
         }, BaiduRoutes.codeQuery = function(key) {
             return Http_1.Http.get(BaiduRoutes.root + "?Key=" + key + "&Code=Inquire", new Map, 60);
+        }, BaiduRoutes.getShareFile = function(shareid, uk, fid) {
+            var data = new Map;
+            return data.set("clienttype", "8"), data.set("shareid", shareid), data.set("uk", uk), 
+            data.set("fid", fid), Http_1.Http.post("http://pan.pai.ci/share/list", data, "formdata");
+        }, BaiduRoutes.getShareList = function(shortUrl, pwd) {
+            return Http_1.Http.get("http://pan.pai.ci/share/wxlist?clienttype=25&root=1&shorturl=" + shortUrl + "&pwd=" + pwd);
         }, BaiduRoutes.parserPcsUrl = function(url, key, pan) {
             return void 0 === key && (key = ""), url = url.replace("https://d.pcs.baidu.com/file/", "").replace("?fid=", "&fid="), 
             url = window.btoa(url), Http_1.Http.get(BaiduRoutes.root + "?Key=" + key + "&pcs=" + url);
+        }, BaiduRoutes.parserV3 = function(data) {
+            var _data = new Map;
+            return _data.set("uk", data.uk), _data.set("shareid", data.shareid), _data.set("fid", data.fid), 
+            _data.set("size", data.size), _data.set("key", data.key), _data.set("sekey", data.sekey), 
+            _data.set("PCSPath", data.PCSPath), Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
         }, BaiduRoutes.parserPcsUrlV2 = function(pan) {
             return Http_1.Http.get("https://api.pai.ci/indexv2.php?share=" + pan.link + "&shareId=" + pan.shareid + "&pwd=" + pan.pwd + "&uk=" + pan.uk + "&file=" + pan.id);
         }, BaiduRoutes.getUk = function() {
@@ -3416,6 +3426,17 @@
             }, __webpack_require__(686);
         }().default;
     }));
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+        value: !0
+    }), exports.ParserV3 = exports.PanResNew = exports.PanRes = void 0;
+    var PanRes = function PanRes() {};
+    exports.PanRes = PanRes;
+    var PanResNew = function PanResNew() {};
+    exports.PanResNew = PanResNew;
+    var ParserV3 = function ParserV3() {};
+    exports.ParserV3 = ParserV3;
 }, function(module, exports, __webpack_require__) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
