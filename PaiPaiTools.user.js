@@ -3026,8 +3026,8 @@
             return Http_1.Http.get(BaiduRoutes.root + "?Key=" + key + "&Code=Inquire", new Map, 60);
         }, BaiduRoutes.getShareFile = function(shareid, uk, fid) {
             var data = new Map;
-            return data.set("clienttype", "8"), data.set("shareid", shareid), data.set("uk", uk), 
-            data.set("fid", fid), Http_1.Http.post("http://pan.pai.ci/share/list", data, "formdata");
+            return data.set("clienttype", "1"), data.set("shareid", shareid), data.set("uk", uk), 
+            data.set("fid", fid), data.set("channel", "android_11_netdisk"), Http_1.Http.post("http://pan.pai.ci/share/list", data, "formdata");
         }, BaiduRoutes.getShareList = function(shortUrl, pwd) {
             return Http_1.Http.get("http://pan.pai.ci/share/wxlist?clienttype=25&root=1&shorturl=" + shortUrl + "&pwd=" + pwd);
         }, BaiduRoutes.parserPcsUrl = function(url, key, pan) {
