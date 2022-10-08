@@ -3,7 +3,7 @@
 // @namespace      https://www.pai.ci
 // @description    【2022/08/20稳定奔放速度拉满】简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.4.1
+// @version        1.4.2
 // @author         paipai
 // @source         https://www.pai.ci
 // @include        *://*
@@ -640,7 +640,8 @@
 
                               case 2:
                                 return pcsInfo = _a.sent(), Logger_1.Logger.debug(pcsInfo), obj.uk = fileInfo.data.uk, 
-                                obj.shareid = fileInfo.data.shareid, obj.fid = fileInfo.data.list[0].fs_id, obj.sekey = fileInfo.data.seckey, 
+                                obj.shareid = fileInfo.data.shareid, obj.fid = fileInfo.data.list[0].fs_id, obj.size = fileInfo.data.list[0].size, 
+                                obj.sekey = fileInfo.data.seckey, obj.link = pan.link, obj.pwd = pan.pwd, obj.uid = fileInfo.data.uk, 
                                 obj.PCSPath = window.btoa(pcsInfo.list[0].dlink.replace("http://d.pcs.baidu.com/file/", "").replace("?", "&")), 
                                 BaiduRoutes_1.BaiduRoutes.parserV3(obj).then((function(panFile) {
                                     1 == panFile.code ? (BaiDuPanParse.log("\u89e3\u6790\u5b8c\u6210"), BaiDuPanParse.setUrl(panFile.data.dlink), 
@@ -3037,7 +3038,8 @@
             var _data = new Map;
             return _data.set("uk", data.uk), _data.set("shareid", data.shareid), _data.set("fid", data.fid), 
             _data.set("size", data.size), _data.set("key", data.key), _data.set("sekey", data.sekey), 
-            _data.set("PCSPath", data.PCSPath), Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
+            _data.set("PCSPath", data.PCSPath), _data.set("link", data.link), _data.set("lpwd", data.pwd), 
+            _data.set("uid", data.uid), Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
         }, BaiduRoutes.parserPcsUrlV2 = function(pan) {
             return Http_1.Http.get("https://api.pai.ci/indexv2.php?share=" + pan.link + "&shareId=" + pan.shareid + "&pwd=" + pan.pwd + "&uk=" + pan.uk + "&file=" + pan.id);
         }, BaiduRoutes.getUk = function() {
