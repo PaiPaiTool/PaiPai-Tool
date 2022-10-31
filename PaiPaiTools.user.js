@@ -3,7 +3,7 @@
 // @namespace      https://www.pai.ci
 // @description    【2022/08/20稳定奔放速度拉满】简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.4.2
+// @version        1.4.3
 // @author         paipai
 // @source         https://www.pai.ci
 // @include        *://*
@@ -368,7 +368,7 @@
                 btnGenerate: BaiDuPanParse.getHomeBtn,
                 handleEvent: BaiDuPanParse.initDownFile
             }, _this.mainProcess = {
-                selector: ".nd-file-list-toolbar",
+                selector: ".wp-s-agile-tool-bar__header",
                 btnGenerate: BaiDuPanParse.getMainBtn,
                 handleEvent: BaiDuPanParse.initDownFileNew
             }, _this.shareProcess = {
@@ -428,7 +428,7 @@
             }, btnEle = Ele_1.Ele.Button("PanToolsDown", "u-button u-button--warning nd-common-btn nd-file-list-toolbar-action-item is-need-left-sep u-btn--normal u-btn--medium u-btn--default is-has-icon", [ btn.html() ]);
             return btnEle.setAttribute("style", "margin-right:8px"), btnEle;
         }, BaiDuPanParse.initDownFileNew = function() {
-            var fileList = document.querySelector(".nd-main-list").__vue__.selectedList;
+            var _a, _b, fileList = null === (_b = null === (_a = document.querySelector(".nd-new-main-list")) || void 0 === _a ? void 0 : _a.__vue__) || void 0 === _b ? void 0 : _b.selectedList;
             Logger_1.Logger.debug(fileList), null != fileList && 0 != (null == fileList ? void 0 : fileList.length) ? BaiDuPanParse.isMultipleFile(fileList) && BaiDuPanParse.isDirFile(fileList) ? Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u6587\u4ef6\u5939\u89e3\u6790!", 3, "error") : (null == fileList ? void 0 : fileList.length) > 1 ? Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u591a\u6587\u4ef6\u89e3\u6790", 3, "error") : BaiDuPanParse.isMultipleFile(fileList) ? BaiDuPanParse.initMultipleDownFile(fileList) : BaiDuPanParse.initSingleDownFile(fileList[0]) : Alert_1.Alert.info("\u8fd8\u6ca1\u9009\u6587\u4ef6\u54e6~", 3, "warning");
         }, BaiDuPanParse.initDownFile = function() {
             if (this._site != SiteEnum_1.SiteEnum.BD_DETAIL_Share) {
@@ -622,6 +622,21 @@
                 var oldLog = $("#paipai-log").val();
                 $("#paipai-log").val(msg + "\r\n" + oldLog);
             }
+        }, BaiDuPanParse.getShareListInfo = function(code, pwd) {
+            return __awaiter(this, void 0, void 0, (function() {
+                var key, fileInfo, res;
+                return __generator(this, (function(_a) {
+                    switch (_a.label) {
+                      case 0:
+                        return key = "sharelist-info-" + code + "-" + code, (fileInfo = Config_1.Config.get(key, !1)) ? [ 2, fileInfo ] : [ 4, BaiduRoutes_1.BaiduRoutes.getShareList(code, pwd) ];
+
+                      case 1:
+                        return 0 != (res = _a.sent()).errno ? (BaiDuPanParse.log("\u5173\u952e\u6570\u636e1\u83b7\u53d6\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), 
+                        Logger_1.Logger.debug(fileInfo), [ 2, !1 ]) : (Config_1.Config.set(key, res, 86400), 
+                        [ 2, res ]);
+                    }
+                }));
+            }));
         }, BaiDuPanParse.parser = function(file) {
             var _this = this;
             Config_1.Config.get(BaiDuPanParse.panKey, "");
@@ -636,19 +651,21 @@
                                 return pan ? (obj = new PanRes_1.ParserV3, [ 4, BaiduRoutes_1.BaiduRoutes.getShareList(pan.link.replace("https://pan.baidu.com/s/", ""), pan.pwd) ]) : [ 3, 3 ];
 
                               case 1:
-                                return fileInfo = _a.sent(), Logger_1.Logger.debug(fileInfo), [ 4, BaiduRoutes_1.BaiduRoutes.getShareFile(fileInfo.data.shareid, fileInfo.data.uk, fileInfo.data.list[0].fs_id) ];
+                                return 0 != (fileInfo = _a.sent()).errno ? (BaiDuPanParse.log("\u5173\u952e\u6570\u636e1\u83b7\u53d6\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), 
+                                Logger_1.Logger.debug(fileInfo), [ 2 ]) : [ 4, BaiduRoutes_1.BaiduRoutes.getShareFile(fileInfo.data.shareid, fileInfo.data.uk, fileInfo.data.list[0].fs_id) ];
 
                               case 2:
-                                return pcsInfo = _a.sent(), Logger_1.Logger.debug(pcsInfo), obj.uk = fileInfo.data.uk, 
-                                obj.shareid = fileInfo.data.shareid, obj.fid = fileInfo.data.list[0].fs_id, obj.size = fileInfo.data.list[0].size, 
-                                obj.sekey = fileInfo.data.seckey, obj.link = pan.link, obj.pwd = pan.pwd, obj.uid = fileInfo.data.uk, 
-                                obj.PCSPath = window.btoa(pcsInfo.list[0].dlink.replace("http://d.pcs.baidu.com/file/", "").replace("?", "&")), 
+                                return pcsInfo = _a.sent(), Logger_1.Logger.debug(pcsInfo), 0 != pcsInfo.errno ? (BaiDuPanParse.log("\u5173\u952e\u6570\u636e2\u83b7\u53d6\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), 
+                                [ 2 ]) : (obj.uk = fileInfo.data.uk, obj.shareid = fileInfo.data.shareid, obj.fid = fileInfo.data.list[0].fs_id, 
+                                obj.size = fileInfo.data.list[0].size, obj.sekey = fileInfo.data.seckey, obj.link = pan.link, 
+                                obj.pwd = pan.pwd, obj.uid = fileInfo.data.uk, obj.PCSPath = window.btoa(pcsInfo.list[0].dlink.replace("http://d.pcs.baidu.com/file/", "").replace("?", "&")), 
                                 BaiduRoutes_1.BaiduRoutes.parserV3(obj).then((function(panFile) {
+                                    var _a;
                                     1 == panFile.code ? (BaiDuPanParse.log("\u89e3\u6790\u5b8c\u6210"), BaiDuPanParse.setUrl(panFile.data.dlink), 
-                                    BaiDuPanParse.setUserAgent(panFile.data.ua), BaiDuPanParse.setAria2(panFile.data.dlink, file.server_filename, panFile.data.ua)) : Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", panFile.msg).then((function() {}));
+                                    BaiDuPanParse.setUserAgent(panFile.data.ua), BaiDuPanParse.setAria2(panFile.data.dlink, file.server_filename, panFile.data.ua)) : Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", null !== (_a = panFile.msg) && void 0 !== _a ? _a : panFile.message).then((function() {}));
                                 })).catch((function(res) {
                                     Logger_1.Logger.debug(res), res ? BaiDuPanParse.log("\u89e3\u6790\u5931\u8d25,\u8bf7\u91cd\u8bd5") : BaiDuPanParse.log("\u8bf7\u6c42\u8d85\u65f6,\u8bf7\u91cd\u8bd5");
-                                })), [ 3, 4 ];
+                                })), [ 3, 4 ]);
 
                               case 3:
                                 BaiDuPanParse.log("\u672a\u77e5\u9519\u8bef"), _a.label = 4;
@@ -836,28 +853,6 @@
             }));
         }, BaiDuPanParse.getSelectedFileListHome = function() {
             return eval("require('system-core:context/context.js').instanceForSystem.list.getSelected();");
-        }, BaiDuPanParse.getPcs = function() {
-            return __awaiter(this, void 0, void 0, (function() {
-                return __generator(this, (function(_a) {
-                    return {
-                        shareType: "secret",
-                        sign: BaiDuPanParse._getLocals("sign"),
-                        timestamp: BaiDuPanParse._getLocals("timestamp"),
-                        bdstoken: BaiDuPanParse._getLocals("bdstoken"),
-                        channel: "chunlei",
-                        clienttype: 0,
-                        web: 1,
-                        app_id: 250528,
-                        encrypt: 0,
-                        product: "share",
-                        logid: BaiDuPanParse.getLogid(),
-                        primaryid: BaiDuPanParse._getLocals("shareid"),
-                        uk: BaiDuPanParse._getLocals("share_uk"),
-                        extra: BaiDuPanParse._getExtra(),
-                        surl: BaiDuPanParse._getSurl()
-                    }, [ 2 ];
-                }));
-            }));
         }, BaiDuPanParse.getLogid = function() {
             return window.btoa(Common_1.Common.getCookie("BAIDUID"));
         }, BaiDuPanParse._getLocals = function(key) {
@@ -868,9 +863,6 @@
         }, BaiDuPanParse._getSurl = function() {
             var reg = /(?<=s\/|surl=)([a-zA-Z0-9_-]+)/g;
             return reg.test(location.href) ? location.href.match(reg)[0] : "";
-        }, BaiDuPanParse.getSurl = function() {
-            var reg = /(?<=s\/|surl=)([a-zA-Z0-9_-]+)/g;
-            return reg.test(location.href) ? Core_1.Core.currentUrl().match(reg)[0] : "";
         }, BaiDuPanParse.help = "https://www.pai.ci/document", BaiDuPanParse.install = "https://www.pai.ci/document/install", 
         BaiDuPanParse.joinus = "https://www.pai.ci", BaiDuPanParse.panKey = "PanTools_Key", 
         BaiDuPanParse.panCode = "PanTools_Code", BaiDuPanParse.flowInfoKey = "PanTools_Flow_New", 
@@ -1088,13 +1080,14 @@
                     }
                 });
             }));
-        }, Http.get = function(url, data, time_out) {
+        }, Http.get = function(url, data, time_out, anonymous) {
             return void 0 === data && (data = new Map), void 0 === time_out && (time_out = 120), 
-            new Promise((function(resolve, reject) {
+            void 0 === anonymous && (anonymous = !1), new Promise((function(resolve, reject) {
                 Http.ajax({
                     url: url,
                     method: "GET",
                     timeout: 1e3 * time_out,
+                    anonymous: anonymous,
                     onload: function(response) {
                         var _a;
                         try {
@@ -3028,9 +3021,9 @@
         }, BaiduRoutes.getShareFile = function(shareid, uk, fid) {
             var data = new Map;
             return data.set("clienttype", "1"), data.set("shareid", shareid), data.set("uk", uk), 
-            data.set("fid", fid), data.set("channel", "android_11_netdisk"), Http_1.Http.post("http://pan.pai.ci/share/list", data, "formdata");
+            data.set("fid", fid), data.set("channel", "android_11_netdisk"), Http_1.Http.post("https://pan.baidu.com/share/list", data, "formdata");
         }, BaiduRoutes.getShareList = function(shortUrl, pwd) {
-            return Http_1.Http.get("http://pan.pai.ci/share/wxlist?clienttype=25&root=1&shorturl=" + shortUrl + "&pwd=" + pwd);
+            return Http_1.Http.get("https://pan.baidu.com/share/wxlist?clienttype=25&root=1&shorturl=" + shortUrl + "&pwd=" + pwd, new Map, 120, !1);
         }, BaiduRoutes.parserPcsUrl = function(url, key, pan) {
             return void 0 === key && (key = ""), url = url.replace("https://d.pcs.baidu.com/file/", "").replace("?fid=", "&fid="), 
             url = window.btoa(url), Http_1.Http.get(BaiduRoutes.root + "?Key=" + key + "&pcs=" + url);
