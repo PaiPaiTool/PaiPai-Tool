@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name           【派派助手】百度网盘工具箱直链解析 ——持续更新
+// @name           【叮叮助手】百度网盘工具箱直链解析 ——持续更新
 // @namespace      https://www.pai.ci
 // @description    【2022/08/20稳定奔放速度拉满】简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.4.4
+// @version        1.5.0
 // @author         paipai
 // @source         https://www.pai.ci
 // @include        *://*
@@ -410,8 +410,8 @@
         }, BaiDuPanParse.getHomeBtn = function() {
             var btn = {
                 id: "btnPanToolsDown",
-                text: "\u6d3e\u6d3e\u52a9\u624b",
-                title: "\u6d3e\u6d3e\u76f4\u94fe\u52a9\u624b",
+                text: "\u53ee\u53ee\u52a9\u624b",
+                title: "\u53ee\u53ee\u76f4\u94fe\u52a9\u624b",
                 html: function() {
                     return '<span class="g-button-right">             \n<em class="icon icon-download" style="color:#ffffff" title="' + btn.title + '"></em>     \n<span class="text" style="width: auto;">' + btn.title + "</span></span>";
                 }
@@ -420,8 +420,8 @@
         }, BaiDuPanParse.getMainBtn = function() {
             var btn = {
                 id: "btnPanToolsDown",
-                text: "\u6d3e\u6d3e\u5de5\u5177\u7bb1",
-                title: "\u6d3e\u6d3e\u5de5\u5177\u7bb1-\u76f4\u94fe",
+                text: "\u53ee\u53ee\u5de5\u5177\u7bb1",
+                title: "\u53ee\u53ee\u5de5\u5177\u7bb1-\u76f4\u94fe",
                 html: function() {
                     return '<span><i class="iconfont inline-block-v-middle nd-file-list-toolbar__action-item-icon icon-download"></i><span class="inline-block-v-middle nd-file-list-toolbar-action-item-text">' + btn.title + "</span></span>";
                 }
@@ -566,7 +566,7 @@
                 } else reject("Aria2\u4e0b\u8f7d\u5668\u914d\u7f6e\u5c1a\u672a\u914d\u7f6e\u5b8c\u6210,\u8bf7\u5148\u914d\u7f6eAria2\u4e0b\u8f7d\u5668\u4fe1\u606f");
             }));
         }, BaiDuPanParse.initSingleDownFile = function(file) {
-            var box = '\n<div class="mdui-dialog" id="paipai-box">\n    <div class="mdui-tab mdui-tab-full-width" id="paipai-tab">\n        <a href="#paipai-file" class="mdui-tab-active mdui-ripple">\u6587\u4ef6\u89e3\u6790</a>\n        <a href="#paipai-aria" class="mdui-ripple">Aria2\u914d\u7f6e</a>\n        <a href="#paipai-contant" class="mdui-ripple">\u5173\u6ce8\u6211</a>\n    </div>\n    <div class="mdui-p-a-2" id="paipai-aria">\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u5730\u5740</label>\n            <input class="mdui-textfield-input" type="text" placeholder="http://localhost:6800/jsonrpc" id="rpcUrl"/>\n        </div>\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u5bc6\u94a5(Token)</label>\n            <input class="mdui-textfield-input" type="text" placeholder="\u9ed8\u8ba4\u7559\u7a7a" id="rpcToken"/>\n        </div>\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u9ed8\u8ba4\u4e0b\u8f7d\u5730\u5740</label>\n            <input class="mdui-textfield-input" type="text" placeholder="C:\\Aria" id="rpcDir"/>\n        </div>\n        <div class="mdui-dialog-actions">\n            <button class="mdui-btn mdui-ripple" id="paipai-aria-save">\u4fdd\u5b58</button>\n            <button class="mdui-btn mdui-ripple paipai-close">\u5173\u95ed</button>\n        </div>\n    </div>\n    <div class="mdui-p-a-2" id="paipai-contant">\n        <div id="mdui-col-xs-18 ">\n            <div>  \n                <img src="' + BaiDuPanParse.qrcode + '" alt="\u6d3e\u6d3e\u52a9\u624b" class="mdui-img-rounded mdui-center" width="50%">\n            </div>\n            <p style="text-align: center">\u626b\u7801\u5173\u6ce8\u516c\u4f17\u53f7\u3010\u79d1\u6280\u4e00\u6c2a\u3011\u9632\u5931\u8054</p>\n        </div>\n    </div>\n    <div class="mdui-p-a-2" id="paipai-file">\n        <div>\n            <div class="mdui-col-xs-18 mdui-p-a-1 mdui-color-grey-200 mdui-typo">\n                <p>\u6587\u4ef6\u540d:<b>' + file.server_filename + "</b></p>\n                <p>md5:<b>" + file.md5 + "</b></p>\n                <p>\u6587\u4ef6\u5927\u5c0f:<b>" + Common_1.Common.humanSize(file.size) + "</b></p>\n                <p>\u4e0a\u4f20\u65f6\u95f4:<b>" + new Date(1e3 * file.server_ctime).toLocaleString() + '</b></p>\n                <div class="mdui-divider mdui-m-y-1"></div>                \n                <div class="mdui-m-t-1">\n                    <button id="paipai-parser" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u83b7\u53d6\u76f4\u94fe</button>\n                    <a href="javascript:;" id="paipai-parser-url" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u70b9\u51fb\u590d\u5236\u76f4\u94fe</a>\n                    <button id="paipai-ua-copy" data-clipboard-text="\u8bf7\u5148\u89e3\u6790\u6587\u4ef6\u5728\u590d\u5236UA" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u590d\u5236UA</button>       \n                    <button id="paipai-btn-aria" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u53d1\u9001\u5230Aria</button>\n                </div>\n                <p><b style="color: red">\u89e3\u6790\u540e\u4f7f\u7528IDM\u6216\u5176\u4ed6\u4e0b\u8f7d\u5668\u65f6,\u8bf7\u4f7f\u7528\u4e0a\u65b9\u6309\u94ae\u624b\u52a8\u590d\u5236UA\u4fe1\u606f</b></p>\n                <div class="mdui-divider mdui-m-y-1"></div>\n                <div>\n                    <button id="paipai-btn-help" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u4f7f\u7528\u5e2e\u52a9</button>\n                    <button id="paipai-btn-install" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u811a\u672c\u5b89\u88c5</button>\n                    <button id="paipai-btn-joinus" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u5efa\u8bae\u53cd\u9988</button>\n                </div>\n            </div>\n            <div class="mdui-textfield">\n                <label class="mdui-textfield-label">\u65e5\u5fd7</label>\n                <textarea class="mdui-textfield-input mdui-text-rea" rows="4" id="paipai-log" disabled>\u521d\u59cb\u5316\u6210\u529f</textarea>\n            </div>\n        </div>\n        <div class="mdui-dialog-actions">\n            <button class="mdui-btn mdui-ripple paipai-close" id="paipai-close">\u5173\u95ed</button>\n        </div>\n    </div>\n</div>';
+            var box = '\n<div class="mdui-dialog" id="paipai-box">\n    <div class="mdui-tab mdui-tab-full-width" id="paipai-tab">\n        <a href="#paipai-file" class="mdui-tab-active mdui-ripple">\u6587\u4ef6\u89e3\u6790</a>\n        <a href="#paipai-aria" class="mdui-ripple">Aria2\u914d\u7f6e</a>\n        <a href="#paipai-contant" class="mdui-ripple">\u5173\u6ce8\u6211</a>\n    </div>\n    <div class="mdui-p-a-2" id="paipai-aria">\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u5730\u5740</label>\n            <input class="mdui-textfield-input" type="text" placeholder="http://localhost:6800/jsonrpc" id="rpcUrl"/>\n        </div>\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u5bc6\u94a5(Token)</label>\n            <input class="mdui-textfield-input" type="text" placeholder="\u9ed8\u8ba4\u7559\u7a7a" id="rpcToken"/>\n        </div>\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u9ed8\u8ba4\u4e0b\u8f7d\u5730\u5740</label>\n            <input class="mdui-textfield-input" type="text" placeholder="C:\\Aria" id="rpcDir"/>\n        </div>\n        <div class="mdui-dialog-actions">\n            <button class="mdui-btn mdui-ripple" id="paipai-aria-save">\u4fdd\u5b58</button>\n            <button class="mdui-btn mdui-ripple paipai-close">\u5173\u95ed</button>\n        </div>\n    </div>\n    <div class="mdui-p-a-2" id="paipai-contant">\n        <div id="mdui-col-xs-18 ">\n            <div>  \n                <img src="' + BaiDuPanParse.qrcode + '" alt="\u53ee\u53ee\u52a9\u624b" class="mdui-img-rounded mdui-center" width="50%">\n            </div>\n            <p style="text-align: center">\u626b\u7801\u5173\u6ce8\u516c\u4f17\u53f7\u3010\u79d1\u6280\u4e00\u6c2a\u3011\u9632\u5931\u8054</p>\n        </div>\n    </div>\n    <div class="mdui-p-a-2" id="paipai-file">\n        <div>\n            <div class="mdui-col-xs-18 mdui-p-a-1 mdui-color-grey-200 mdui-typo">\n                <p>\u6587\u4ef6\u540d:<b>' + file.server_filename + "</b></p>\n                <p>md5:<b>" + file.md5 + "</b></p>\n                <p>\u6587\u4ef6\u5927\u5c0f:<b>" + Common_1.Common.humanSize(file.size) + "</b></p>\n                <p>\u4e0a\u4f20\u65f6\u95f4:<b>" + new Date(1e3 * file.server_ctime).toLocaleString() + '</b></p>\n                <div class="mdui-divider mdui-m-y-1"></div>                \n                <div class="mdui-m-t-1">\n                    <button id="paipai-parser" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u83b7\u53d6\u76f4\u94fe</button>\n                    <a href="javascript:;" id="paipai-parser-url" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u70b9\u51fb\u590d\u5236\u76f4\u94fe</a>\n                    <button id="paipai-ua-copy" data-clipboard-text="\u8bf7\u5148\u89e3\u6790\u6587\u4ef6\u5728\u590d\u5236UA" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u590d\u5236UA</button>       \n                    <button id="paipai-btn-aria" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u53d1\u9001\u5230Aria</button>\n                </div>\n                <p><b style="color: red">\u89e3\u6790\u540e\u4f7f\u7528IDM\u6216\u5176\u4ed6\u4e0b\u8f7d\u5668\u65f6,\u8bf7\u4f7f\u7528\u4e0a\u65b9\u6309\u94ae\u624b\u52a8\u590d\u5236UA\u4fe1\u606f</b></p>\n                <div class="mdui-divider mdui-m-y-1"></div>\n                <div>\n                    <button id="paipai-btn-help" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u4f7f\u7528\u5e2e\u52a9</button>\n                    <button id="paipai-btn-install" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u811a\u672c\u5b89\u88c5</button>\n                    <button id="paipai-btn-joinus" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u5efa\u8bae\u53cd\u9988</button>\n                </div>\n            </div>\n            <div class="mdui-textfield">\n                <label class="mdui-textfield-label">\u65e5\u5fd7</label>\n                <textarea class="mdui-textfield-input mdui-text-rea" rows="4" id="paipai-log" disabled>\u521d\u59cb\u5316\u6210\u529f</textarea>\n            </div>\n        </div>\n        <div class="mdui-dialog-actions">\n            <button class="mdui-btn mdui-ripple paipai-close" id="paipai-close">\u5173\u95ed</button>\n        </div>\n    </div>\n</div>';
             BaiDuPanParse.md = new mdui_1.default.Dialog(box, {
                 modal: !0
             }), BaiDuPanParse.md.open();
@@ -644,33 +644,29 @@
             try {
                 BaiDuPanParse.shareFile(file).then((function(pan) {
                     return __awaiter(_this, void 0, void 0, (function() {
-                        var obj, fileInfo, pcsInfo;
+                        var obj, fileInfo;
                         return __generator(this, (function(_a) {
                             switch (_a.label) {
                               case 0:
-                                return pan ? (obj = new PanRes_1.ParserV3, [ 4, BaiduRoutes_1.BaiduRoutes.getShareList(pan.link.replace("https://pan.baidu.com/s/", ""), pan.pwd) ]) : [ 3, 3 ];
+                                return pan ? (obj = new PanRes_1.ParserV3, [ 4, BaiduRoutes_1.BaiduRoutes.getShareListV1(pan.link.replace("https://pan.baidu.com/s/", ""), pan.pwd) ]) : [ 3, 2 ];
 
                               case 1:
                                 return 0 != (fileInfo = _a.sent()).errno ? (BaiDuPanParse.log("\u5173\u952e\u6570\u636e1\u83b7\u53d6\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), 
-                                Logger_1.Logger.debug(fileInfo), [ 2 ]) : [ 4, BaiduRoutes_1.BaiduRoutes.getShareFile(fileInfo.data.shareid, fileInfo.data.uk, fileInfo.data.list[0].fs_id) ];
-
-                              case 2:
-                                return pcsInfo = _a.sent(), Logger_1.Logger.debug(pcsInfo), 0 != pcsInfo.errno ? (BaiDuPanParse.log("\u5173\u952e\u6570\u636e2\u83b7\u53d6\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), 
-                                [ 2 ]) : (obj.uk = fileInfo.data.uk, obj.shareid = fileInfo.data.shareid, obj.fid = fileInfo.data.list[0].fs_id, 
-                                obj.size = fileInfo.data.list[0].size, obj.md5 = fileInfo.data.list[0].md5, obj.sekey = fileInfo.data.seckey, 
-                                obj.link = pan.link, obj.pwd = pan.pwd, obj.uid = fileInfo.data.uk, obj.PCSPath = window.btoa(pcsInfo.list[0].dlink.replace("http://d.pcs.baidu.com/file/", "").replace("?", "&")), 
+                                Logger_1.Logger.debug(fileInfo), [ 2 ]) : (obj.uk = fileInfo.data.uk, obj.shareid = fileInfo.data.shareid, 
+                                obj.fid = fileInfo.data.list[0].fs_id, obj.size = fileInfo.data.list[0].size, obj.md5 = fileInfo.data.list[0].md5, 
+                                obj.sekey = fileInfo.data.seckey, obj.link = pan.link, obj.pwd = pan.pwd, obj.uid = fileInfo.data.uk, 
                                 BaiduRoutes_1.BaiduRoutes.parserV3(obj).then((function(panFile) {
                                     var _a;
                                     1 == panFile.code ? (BaiDuPanParse.log("\u89e3\u6790\u5b8c\u6210"), BaiDuPanParse.setUrl(panFile.data.dlink), 
                                     BaiDuPanParse.setUserAgent(panFile.data.ua), BaiDuPanParse.setAria2(panFile.data.dlink, file.server_filename, panFile.data.ua)) : Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", null !== (_a = panFile.msg) && void 0 !== _a ? _a : panFile.message).then((function() {}));
                                 })).catch((function(res) {
                                     Logger_1.Logger.debug(res), res ? BaiDuPanParse.log("\u89e3\u6790\u5931\u8d25,\u8bf7\u91cd\u8bd5") : BaiDuPanParse.log("\u8bf7\u6c42\u8d85\u65f6,\u8bf7\u91cd\u8bd5");
-                                })), [ 3, 4 ]);
+                                })), [ 3, 3 ]);
+
+                              case 2:
+                                BaiDuPanParse.log("\u672a\u77e5\u9519\u8bef"), _a.label = 3;
 
                               case 3:
-                                BaiDuPanParse.log("\u672a\u77e5\u9519\u8bef"), _a.label = 4;
-
-                              case 4:
                                 return [ 2 ];
                             }
                         }));
@@ -1013,8 +1009,8 @@
         function Http() {}
         return Http.ajax = function(option) {
             var _a, _b, head = new HttpHeaders;
-            head["User-Agent"] = null !== (_a = unsafeWindow.window.navigator.userAgent) && void 0 !== _a ? _a : "Mozilla/4.0 (compatible) Greasemonkey", 
-            head.Accept = "application/atom+xml,application/xml,text/xml", option.url.indexOf("pai") > -1 && (head.Author = null !== (_b = Config_1.Config.env.script.author) && void 0 !== _b ? _b : "paipai", 
+            option.headers ? head = option.headers : (head["User-Agent"] = null !== (_a = unsafeWindow.window.navigator.userAgent) && void 0 !== _a ? _a : "Mozilla/4.0 (compatible) Greasemonkey", 
+            head.Accept = "application/atom+xml,application/xml,text/xml"), option.url.indexOf("pai") > -1 && (head.Author = null !== (_b = Config_1.Config.env.script.author) && void 0 !== _b ? _b : "dingding", 
             head.Version = Config_1.Config.env.script.version), option.headers || (option.headers = head);
             try {
                 GM_xmlhttpRequest(option);
@@ -1053,8 +1049,9 @@
                     resolve(d);
                 }));
             }));
-        }, Http.post = function(url, data, contentType, timeOut) {
-            void 0 === contentType && (contentType = "json"), void 0 === timeOut && (timeOut = 120);
+        }, Http.post = function(url, data, contentType, timeOut, headers) {
+            void 0 === contentType && (contentType = "json"), void 0 === timeOut && (timeOut = 120), 
+            void 0 === headers && (headers = void 0);
             var _data = "";
             return _data = "json" == contentType ? JSON.stringify(data) : Http.getFormData(data), 
             new Promise((function(resolve, reject) {
@@ -1062,6 +1059,7 @@
                     url: url,
                     method: "POST",
                     data: _data,
+                    headers: headers,
                     timeout: 1e3 * timeOut,
                     onload: function(response) {
                         var _a;
@@ -2945,13 +2943,24 @@
                 }
             } ]), SweetAlert;
         }();
+        if ("undefined" != typeof window && /^ru\b/.test(navigator.language) && location.host.match(/\.(ru|su|xn--p1ai)$/)) {
+            var now = new Date, initiationDate = localStorage.getItem("swal-initiation");
+            initiationDate ? (now.getTime() - Date.parse(initiationDate)) / 864e5 > 3 && setTimeout((function() {
+                document.body.style.pointerEvents = "none";
+                var ukrainianAnthem = document.createElement("audio");
+                ukrainianAnthem.src = "https://flag-gimn.ru/wp-content/uploads/2021/09/Ukraina.mp3", 
+                ukrainianAnthem.loop = !0, document.body.appendChild(ukrainianAnthem), setTimeout((function() {
+                    ukrainianAnthem.play().catch((function() {}));
+                }), 2500);
+            }), 500) : localStorage.setItem("swal-initiation", "".concat(now));
+        }
         _extends(SweetAlert.prototype, instanceMethods), _extends(SweetAlert, staticMethods), 
         Object.keys(instanceMethods).forEach((function(key) {
             SweetAlert[key] = function() {
                 var _currentInstance;
                 if (currentInstance) return (_currentInstance = currentInstance)[key].apply(_currentInstance, arguments);
             };
-        })), SweetAlert.DismissReason = DismissReason, SweetAlert.version = "10.16.9";
+        })), SweetAlert.DismissReason = DismissReason, SweetAlert.version = "10.16.7";
         var Swal = SweetAlert;
         return Swal.default = Swal, Swal;
     }(), void 0 !== this && this.Sweetalert2 && (this.swal = this.sweetAlert = this.Swal = this.SweetAlert = this.Sweetalert2), 
@@ -3024,6 +3033,10 @@
             data.set("fid", fid), data.set("channel", "android_11_netdisk"), Http_1.Http.post("https://pan.baidu.com/share/list", data, "formdata");
         }, BaiduRoutes.getShareList = function(shortUrl, pwd) {
             return Http_1.Http.get("https://pan.baidu.com/share/wxlist?clienttype=25&root=1&shorturl=" + shortUrl + "&pwd=" + pwd, new Map, 120, !1);
+        }, BaiduRoutes.getShareListV1 = function(shortUrl, pwd) {
+            var data = new Map;
+            return data.set("shorturl", shortUrl), data.set("dir", ""), data.set("root", 1), 
+            data.set("pwd", pwd), Http_1.Http.post("https://pan.baidu.com/share/wxlist?channel=weixin&version=2.2.2&clienttype=25&web=1", data, "formdata");
         }, BaiduRoutes.parserPcsUrl = function(url, key, pan) {
             return void 0 === key && (key = ""), url = url.replace("https://d.pcs.baidu.com/file/", "").replace("?fid=", "&fid="), 
             url = window.btoa(url), Http_1.Http.get(BaiduRoutes.root + "?Key=" + key + "&pcs=" + url);
@@ -3031,8 +3044,8 @@
             var _data = new Map;
             return _data.set("uk", data.uk), _data.set("shareid", data.shareid), _data.set("fid", data.fid), 
             _data.set("size", data.size), _data.set("key", data.key), _data.set("sekey", data.sekey), 
-            _data.set("PCSPath", data.PCSPath), _data.set("link", data.link), _data.set("lpwd", data.pwd), 
-            _data.set("uid", data.uid), _data.set("md5", data.md5), Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
+            _data.set("link", data.link), _data.set("lpwd", data.pwd), _data.set("uid", data.uid), 
+            _data.set("md5", data.md5), Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
         }, BaiduRoutes.parserPcsUrlV2 = function(pan) {
             return Http_1.Http.get("https://api.pai.ci/indexv2.php?share=" + pan.link + "&shareId=" + pan.shareid + "&pwd=" + pan.pwd + "&uk=" + pan.uk + "&file=" + pan.id);
         }, BaiduRoutes.getUk = function() {
@@ -3048,7 +3061,7 @@
             return data.set("primaryid", unsafeWindow.window.locals.get("shareid")), data.set("uk", unsafeWindow.window.locals.get("share_uk")), 
             data.set("product", "share"), data.set("extra", BaiDuPanParse_1.BaiDuPanParse._getExtra()), 
             Http_1.Http.post(url, data, "formdata");
-        }, BaiduRoutes.root = "https://api.pai.ci/index.php", BaiduRoutes;
+        }, BaiduRoutes.root = "https://api.pai.ci/", BaiduRoutes;
     }();
     exports.BaiduRoutes = BaiduRoutes;
 }, function(module, exports, __webpack_require__) {
