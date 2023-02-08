@@ -3,7 +3,7 @@
 // @namespace      https://www.pai.ci
 // @description    【2022/08/20稳定奔放速度拉满】简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.5.0
+// @version        1.5.1
 // @author         paipai
 // @source         https://www.pai.ci
 // @include        *://*
@@ -648,25 +648,31 @@
                         return __generator(this, (function(_a) {
                             switch (_a.label) {
                               case 0:
-                                return pan ? (obj = new PanRes_1.ParserV3, [ 4, BaiduRoutes_1.BaiduRoutes.getShareListV1(pan.link.replace("https://pan.baidu.com/s/", ""), pan.pwd) ]) : [ 3, 2 ];
+                                return pan ? (obj = new PanRes_1.ParserV3, [ 4, BaiduRoutes_1.BaiduRoutes.getShareListV1(pan.link.replace("https://pan.baidu.com/s/", ""), pan.pwd) ]) : [ 3, 4 ];
 
                               case 1:
-                                return 0 != (fileInfo = _a.sent()).errno ? (BaiDuPanParse.log("\u5173\u952e\u6570\u636e1\u83b7\u53d6\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), 
-                                Logger_1.Logger.debug(fileInfo), [ 2 ]) : (obj.uk = fileInfo.data.uk, obj.shareid = fileInfo.data.shareid, 
-                                obj.fid = fileInfo.data.list[0].fs_id, obj.size = fileInfo.data.list[0].size, obj.md5 = fileInfo.data.list[0].md5, 
-                                obj.sekey = fileInfo.data.seckey, obj.link = pan.link, obj.pwd = pan.pwd, obj.uid = fileInfo.data.uk, 
+                                return 0 == (fileInfo = _a.sent()).errno ? [ 3, 3 ] : [ 4, Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", "\u6587\u4ef6\u4fe1\u606f\u83b7\u53d6\u5931\u8d25,\u8bf7\u91cd\u8bd5") ];
+
+                              case 2:
+                                return _a.sent(), BaiDuPanParse.log("\u5173\u952e\u6570\u636e1\u83b7\u53d6\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), 
+                                Logger_1.Logger.debug(fileInfo), [ 2 ];
+
+                              case 3:
+                                return obj.uk = fileInfo.data.uk, obj.shareid = fileInfo.data.shareid, obj.fid = fileInfo.data.list[0].fs_id, 
+                                obj.size = fileInfo.data.list[0].size, obj.md5 = fileInfo.data.list[0].md5, obj.sekey = fileInfo.data.seckey, 
+                                obj.link = pan.link, obj.pwd = pan.pwd, obj.uid = fileInfo.data.uk, obj.PCSPath = window.btoa(fileInfo.data.list[0].dlink.replace("http://d.pcs.baidu.com/file/", "").replace("?", "&")), 
                                 BaiduRoutes_1.BaiduRoutes.parserV3(obj).then((function(panFile) {
                                     var _a;
                                     1 == panFile.code ? (BaiDuPanParse.log("\u89e3\u6790\u5b8c\u6210"), BaiDuPanParse.setUrl(panFile.data.dlink), 
                                     BaiDuPanParse.setUserAgent(panFile.data.ua), BaiDuPanParse.setAria2(panFile.data.dlink, file.server_filename, panFile.data.ua)) : Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", null !== (_a = panFile.msg) && void 0 !== _a ? _a : panFile.message).then((function() {}));
                                 })).catch((function(res) {
                                     Logger_1.Logger.debug(res), res ? BaiDuPanParse.log("\u89e3\u6790\u5931\u8d25,\u8bf7\u91cd\u8bd5") : BaiDuPanParse.log("\u8bf7\u6c42\u8d85\u65f6,\u8bf7\u91cd\u8bd5");
-                                })), [ 3, 3 ]);
+                                })), [ 3, 5 ];
 
-                              case 2:
-                                BaiDuPanParse.log("\u672a\u77e5\u9519\u8bef"), _a.label = 3;
+                              case 4:
+                                BaiDuPanParse.log("\u672a\u77e5\u9519\u8bef"), _a.label = 5;
 
-                              case 3:
+                              case 5:
                                 return [ 2 ];
                             }
                         }));
@@ -3029,7 +3035,7 @@
             return Http_1.Http.get(BaiduRoutes.root + "?Key=" + key + "&Code=Inquire", new Map, 60);
         }, BaiduRoutes.getShareFile = function(shareid, uk, fid) {
             var data = new Map;
-            return data.set("clienttype", "1"), data.set("shareid", shareid), data.set("uk", uk), 
+            return data.set("clienttype", "2"), data.set("shareid", shareid), data.set("uk", uk), 
             data.set("fid", fid), data.set("channel", "android_11_netdisk"), Http_1.Http.post("https://pan.baidu.com/share/list", data, "formdata");
         }, BaiduRoutes.getShareList = function(shortUrl, pwd) {
             return Http_1.Http.get("https://pan.baidu.com/share/wxlist?clienttype=25&root=1&shorturl=" + shortUrl + "&pwd=" + pwd, new Map, 120, !1);
@@ -3044,8 +3050,8 @@
             var _data = new Map;
             return _data.set("uk", data.uk), _data.set("shareid", data.shareid), _data.set("fid", data.fid), 
             _data.set("size", data.size), _data.set("key", data.key), _data.set("sekey", data.sekey), 
-            _data.set("link", data.link), _data.set("lpwd", data.pwd), _data.set("uid", data.uid), 
-            _data.set("md5", data.md5), Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
+            _data.set("PCSPath", data.PCSPath), _data.set("link", data.link), _data.set("lpwd", data.pwd), 
+            _data.set("uid", data.uid), _data.set("md5", data.md5), Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
         }, BaiduRoutes.parserPcsUrlV2 = function(pan) {
             return Http_1.Http.get("https://api.pai.ci/indexv2.php?share=" + pan.link + "&shareId=" + pan.shareid + "&pwd=" + pan.pwd + "&uk=" + pan.uk + "&file=" + pan.id);
         }, BaiduRoutes.getUk = function() {
@@ -3166,14 +3172,14 @@
                                 var NewTarget = _getPrototypeOf(this).constructor;
                                 result = Reflect.construct(Super, arguments, NewTarget);
                             } else result = Super.apply(this, arguments);
-                            return _possibleConstructorReturn(this, result);
+                            return function _possibleConstructorReturn(self, call) {
+                                if (call && ("object" === clipboard_typeof(call) || "function" == typeof call)) return call;
+                                return function _assertThisInitialized(self) {
+                                    if (void 0 === self) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+                                    return self;
+                                }(self);
+                            }(this, result);
                         };
-                    }
-                    function _possibleConstructorReturn(self, call) {
-                        return !call || "object" !== clipboard_typeof(call) && "function" != typeof call ? function _assertThisInitialized(self) {
-                            if (void 0 === self) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-                            return self;
-                        }(self) : call;
                     }
                     function _getPrototypeOf(o) {
                         return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
@@ -3287,12 +3293,13 @@
                     }(tiny_emitter_default()), clipboard = Clipboard;
                 },
                 828: function(module) {
+                    var DOCUMENT_NODE_TYPE = 9;
                     if ("undefined" != typeof Element && !Element.prototype.matches) {
                         var proto = Element.prototype;
                         proto.matches = proto.matchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector || proto.oMatchesSelector || proto.webkitMatchesSelector;
                     }
                     module.exports = function closest(element, selector) {
-                        for (;element && 9 !== element.nodeType; ) {
+                        for (;element && element.nodeType !== DOCUMENT_NODE_TYPE; ) {
                             if ("function" == typeof element.matches && element.matches(selector)) return element;
                             element = element.parentNode;
                         }
