@@ -846,8 +846,8 @@
         }, BaiDuPanParse._getSurl = function() {
             var reg = /(?<=s\/|surl=)([a-zA-Z0-9_-]+)/g;
             return reg.test(location.href) ? location.href.match(reg)[0] : "";
-        }, BaiDuPanParse.prefix = "tt", BaiDuPanParse.help = "https://www.pai.ci/document", 
-        BaiDuPanParse.install = "https://www.pai.ci/document/install", BaiDuPanParse.joinus = "https://www.pai.ci", 
+        }, BaiDuPanParse.prefix = "tt", BaiDuPanParse.help = "https://wiki.tttt.ee/wiki/xinshou.html ", 
+        BaiDuPanParse.install = "https://wiki.tttt.ee/wiki/install.html", BaiDuPanParse.joinus = "https://wiki.tttt.ee", 
         BaiDuPanParse.panKey = "PanTools_Key", BaiDuPanParse.panCode = "PanTools_Code", 
         BaiDuPanParse.flowInfoKey = "PanTools_Flow_New", BaiDuPanParse.AriaConfig = "AriaConfig_Cache", 
         BaiDuPanParse.lock = !1, BaiDuPanParse.qrcode = "https://www.pai.ci/wxcode.jpg", 
