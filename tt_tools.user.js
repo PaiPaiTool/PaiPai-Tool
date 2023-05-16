@@ -3,7 +3,7 @@
 // @namespace      https://www.tttt.ee
 // @description    简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.0.0
+// @version        1.0.1
 // @author         TT-down
 // @source         https://www.tttt.ee
 // @include        *://*
@@ -3039,8 +3039,9 @@
         }, BaiduRoutes.getUk = function() {
             return Http_1.Http.get("https://pan.baidu.com/rest/2.0/xpan/nas?method=uinfo");
         }, BaiduRoutes.pcsQuery = function(fsids) {
-            var url = "https://pan.baidu.com/rest/2.0/xpan/multimedia?method=filemetas&dlink=1&fsids=[" + fsids.join(",") + "]";
-            return Http_1.Http.get(url, new Map, 60);
+            var data = new Map;
+            return data.set("method", "filemetas"), data.set("dlink", 1), data.set("fsids", "[" + fsids.join(",") + "]"), 
+            Http_1.Http.post("https://pan.baidu.com/rest/2.0/xpan/multimedia", data, "formdata");
         }, BaiduRoutes.getSign = function(surl) {
             var url = "https://pan.baidu.com/share/tplconfig?fields=sign,timestamp&channel=chunlei&web=1&app_id=250528&clienttype=0&surl=" + surl;
             return Http_1.Http.get(url);
