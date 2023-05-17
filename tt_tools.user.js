@@ -6,7 +6,7 @@
 // @version        1.0.1
 // @author         TT-down
 // @source         https://www.tttt.ee
-// @include        *://*
+// @include        *//pan.baidu.com/disk/*
 // @require        https://lib.baomitu.com/mdui/1.0.2/js/mdui.min.js
 // @require        https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js
 // @supportURL     https://www.tttt.ee
