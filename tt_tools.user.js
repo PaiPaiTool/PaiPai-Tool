@@ -3,7 +3,7 @@
 // @namespace      https://www.tttt.ee
 // @description    简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.0.3
+// @version        1.0.4
 // @author         TT-down
 // @source         https://www.tttt.ee
 // @include        *//pan.baidu.com/disk/*
@@ -827,7 +827,7 @@
         BaiDuPanParse.install = "https://wiki.tttt.ee/wiki/install.html", BaiDuPanParse.joinus = "https://wiki.tttt.ee", 
         BaiDuPanParse.panKey = "PanTools_Key", BaiDuPanParse.panCode = "PanTools_Code", 
         BaiDuPanParse.flowInfoKey = "PanTools_Flow_New", BaiDuPanParse.AriaConfig = "AriaConfig_Cache", 
-        BaiDuPanParse.lock = !1, BaiDuPanParse.qrcode = "https://s1.ax1x.com/2023/06/24/pCtdqxI.jpg", 
+        BaiDuPanParse.lock = !1, BaiDuPanParse.qrcode = "https://s2.loli.net/2023/06/24/1GFNkKYnWbS9sfm.jpg", 
         BaiDuPanParse;
     }(AppBase_1.AppBase);
     exports.BaiDuPanParse = BaiDuPanParse;
