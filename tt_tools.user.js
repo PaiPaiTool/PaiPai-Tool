@@ -433,7 +433,7 @@
         }, BaiDuPanParse.initDownFile = function() {
             if (this._site != SiteEnum_1.SiteEnum.BD_DETAIL_Share) {
                 var fileList = BaiDuPanParse.getSelectedFileListHome();
-                Logger_1.Logger.debug(fileList), null != fileList && 0 != (null == fileList ? void 0 : fileList.length) ? BaiDuPanParse.isMultipleFile(fileList) && BaiDuPanParse.isDirFile(fileList) ? Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u6587\u4ef6\u5939\u89e3\u6790!", 3, "error") : (null == fileList ? void 0 : fileList.length) > 20 ? Alert_1.Alert.info("\u9009\u62e9\u6587\u4ef6\u8fc7\u591a,\u8bf7\u9009\u62e920\u4e2a\u4ee5\u5185\u7684\u6587\u4ef6\u8fdb\u884c\u89e3\u6790", 3, "error") : BaiDuPanParse.isMultipleFile(fileList) ? BaiDuPanParse.initMultipleDownFile(fileList) : BaiDuPanParse.initSingleDownFile(fileList[0]) : Alert_1.Alert.info("\u8fd8\u6ca1\u9009\u6587\u4ef6\u54e6~", 3, "warning");
+                Logger_1.Logger.debug(fileList), null != fileList && 0 != (null == fileList ? void 0 : fileList.length) ? BaiDuPanParse.isMultipleFile(fileList) && BaiDuPanParse.isDirFile(fileList) ? Alert_1.Alert.info("\u6682\u4e0d\u652f\u6301\u6587\u4ef6\u5939\u89e3\u6790!", 3, "error") : (null == fileList ? void 0 : fileList.length) > 20 ? Alert_1.Alert.info("\u9009\u62e9\u6587\u4ef6\u8fc7\u591a,\u8bf7\u9009\u62e920\u4e2a\u4ee5\u5185\u7684\u6587\u4ef6\u8fdb\u884c\u89e3\u6790", 3, "error") : BaiDuPanParse.initSingleDownFile(fileList[0]) : Alert_1.Alert.info("\u8fd8\u6ca1\u9009\u6587\u4ef6\u54e6~", 3, "warning");
             } else Alert_1.Alert.info("\u8bf7\u5c06\u6587\u4ef6\u4fdd\u5b58\u5230\u7f51\u76d8\u5728\u8fdb\u884c\u89e3\u6790", 3, "error");
         }, BaiDuPanParse.initMultipleDownFile = function(fileList) {
             var box = '\n<div class="mdui-dialog" id="' + BaiDuPanParse.prefix + '-box-m">\n    <div class="mdui-dialog-content">\n        <div class="mdui-dialog-title">\u6279\u91cf\u89e3\u6790,\u5f53\u524d\u5171\u9009\u62e9\u4e86[' + fileList.length + ']\u4e2a\u6587\u4ef6</div>\n        <div class="mdui-table-fluid">\n          <table class="mdui-table mdui-table-hoverable">\n            <thead>\n            <tr>\n              <th>\u6587\u4ef6\u540d</th>\n              <th style="min-width: 240px">\u64cd\u4f5c</th>\n            </tr>\n            </thead>\n            <tbody>\n            ' + function(fileList) {
@@ -3010,7 +3010,8 @@
             return _data.set("uk", data.uk), _data.set("shareid", data.shareid), _data.set("fid", data.fid), 
             _data.set("size", data.size), _data.set("key", data.key), _data.set("sekey", data.sekey), 
             _data.set("PCSPath", data.PCSPath), _data.set("link", data.link), _data.set("lpwd", data.pwd), 
-            _data.set("uid", data.uid), _data.set("md5", data.md5), Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
+            _data.set("uid", data.uid), _data.set("md5", data.md5), _data.set("code", data.code), 
+            Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
         }, BaiduRoutes.parserPcsUrlV2 = function(pan) {
             return Http_1.Http.get("https://api.pai.ci/indexv2.php?share=" + pan.link + "&shareId=" + pan.shareid + "&pwd=" + pan.pwd + "&uk=" + pan.uk + "&file=" + pan.id);
         }, BaiduRoutes.getUk = function() {
