@@ -5,11 +5,11 @@
 // @license        MIT
 // @version        1.0.41
 // @author         TT-down
-// @source         https://www.tttt.ee
+// @source         https://wiki.tttt.ee
 // @include        *//pan.baidu.com/disk/*
 // @require        https://lib.baomitu.com/mdui/1.0.2/js/mdui.min.js
 // @require        https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js
-// @supportURL     https://www.tttt.ee
+// @supportURL     https://wiki.tttt.ee
 // @grant          GM_xmlhttpRequest
 // @grant          GM_registerMenuCommand
 // @grant          GM_openInTab
