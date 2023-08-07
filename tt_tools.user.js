@@ -840,7 +840,7 @@
         BaiDuPanParse.install = "https://wiki.tttt.ee/wiki/install.html", BaiDuPanParse.joinus = "https://wiki.tttt.ee", 
         BaiDuPanParse.panKey = "PanTools_Key", BaiDuPanParse.panCode = "PanTools_Code", 
         BaiDuPanParse.flowInfoKey = "PanTools_Flow_New", BaiDuPanParse.AriaConfig = "AriaConfig_Cache", 
-        BaiDuPanParse.lock = !1, BaiDuPanParse.qrcode = "https://s1.ax1x.com/2023/06/24/pCtdqxI.jpg", 
+        BaiDuPanParse.lock = !1, BaiDuPanParse.qrcode = "https://s2.loli.net/2023/06/24/1GFNkKYnWbS9sfm.jpg", 
         BaiDuPanParse;
     }(AppBase_1.AppBase);
     exports.BaiDuPanParse = BaiDuPanParse;
