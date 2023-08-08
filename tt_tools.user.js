@@ -640,13 +640,13 @@
                                         })), [ 2 ];
                                     }));
                                 }));
-                            })) : (Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", "\u83b7\u53d6token\u5931\u8d25,\u8bf7\u91cd\u8bd5"), 
+                            })) : (Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", '\u83b7\u53d6token\u5931\u8d25,\u8bf7<a href="https://openapi.baidu.com/oauth/2.0/authorize?client_id=IlLqBbU3GjQ0t46TRwFateTprHWl39zF&response_type=token&redirect_uri=oob&scope=basic,netdisk" target="_blank">\u70b9\u51fb\u6388\u6743</a>\u540e\u91cd\u8bd5'), 
                             BaiDuPanParse.log("\u83b7\u53d6token\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), Logger_1.Logger.debug(authToken)), 
                             [ 2 ];
                         }));
                     }));
                 })).catch((function(e) {
-                    Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", "\u83b7\u53d6token\u5931\u8d25,\u8bf7\u91cd\u8bd5"), 
+                    Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", '\u83b7\u53d6token\u5931\u8d25,\u8bf7<a href="https://openapi.baidu.com/oauth/2.0/authorize?client_id=IlLqBbU3GjQ0t46TRwFateTprHWl39zF&response_type=token&redirect_uri=oob&scope=basic,netdisk" target="_blank">\u70b9\u51fb\u6388\u6743</a>\u540e\u91cd\u8bd5'), 
                     BaiDuPanParse.log("\u83b7\u53d6token\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), Logger_1.Logger.debug(e);
                 })), $("#" + BaiDuPanParse.prefix + "-parser").removeAttr("disabled");
             } catch (e) {
@@ -840,7 +840,7 @@
         BaiDuPanParse.install = "https://wiki.tttt.ee/wiki/install.html", BaiDuPanParse.joinus = "https://wiki.tttt.ee", 
         BaiDuPanParse.panKey = "PanTools_Key", BaiDuPanParse.panCode = "PanTools_Code", 
         BaiDuPanParse.flowInfoKey = "PanTools_Flow_New", BaiDuPanParse.AriaConfig = "AriaConfig_Cache", 
-        BaiDuPanParse.lock = !1, BaiDuPanParse.qrcode = "https://s2.loli.net/2023/06/24/1GFNkKYnWbS9sfm.jpg", 
+        BaiDuPanParse.lock = !1, BaiDuPanParse.qrcode = "https://s1.ax1x.com/2023/06/24/pCtdqxI.jpg", 
         BaiDuPanParse;
     }(AppBase_1.AppBase);
     exports.BaiDuPanParse = BaiDuPanParse;
