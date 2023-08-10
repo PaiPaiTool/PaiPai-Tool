@@ -3,7 +3,7 @@
 // @namespace      https://www.tttt.ee
 // @description    简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.0.5
+// @version        1.0.6
 // @author         TT-down
 // @source         https://www.tttt.ee
 // @include        *//pan.baidu.com/disk/*
@@ -640,13 +640,13 @@
                                         })), [ 2 ];
                                     }));
                                 }));
-                            })) : (Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", '\u83b7\u53d6token\u5931\u8d25,\u8bf7<a href="https://openapi.baidu.com/oauth/2.0/authorize?client_id=IlLqBbU3GjQ0t46TRwFateTprHWl39zF&response_type=token&redirect_uri=oob&scope=basic,netdisk" target="_blank">\u70b9\u51fb\u6388\u6743</a>\u540e\u91cd\u8bd5'), 
+                            })) : (Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", '\u83b7\u53d6token\u5931\u8d25,\u8bf7<a href="https://openapi.baidu.com/oauth/2.0/authorize?client_id=IlLqBbU3GjQ0t46TRwFateTprHWl39zF&response_type=token&redirect_uri=oob&scope=basic,netdisk" rel="noreferrer" target="_blank">\u70b9\u51fb\u6388\u6743</a>\u540e\u91cd\u8bd5'), 
                             BaiDuPanParse.log("\u83b7\u53d6token\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), Logger_1.Logger.debug(authToken)), 
                             [ 2 ];
                         }));
                     }));
                 })).catch((function(e) {
-                    Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", '\u83b7\u53d6token\u5931\u8d25,\u8bf7<a href="https://openapi.baidu.com/oauth/2.0/authorize?client_id=IlLqBbU3GjQ0t46TRwFateTprHWl39zF&response_type=token&redirect_uri=oob&scope=basic,netdisk" target="_blank">\u70b9\u51fb\u6388\u6743</a>\u540e\u91cd\u8bd5'), 
+                    Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", '\u83b7\u53d6token\u5931\u8d25,\u8bf7<a href="https://openapi.baidu.com/oauth/2.0/authorize?client_id=IlLqBbU3GjQ0t46TRwFateTprHWl39zF&response_type=token&redirect_uri=oob&scope=basic,netdisk" rel="noreferrer" target="_blank">\u70b9\u51fb\u6388\u6743</a>\u540e\u91cd\u8bd5'), 
                     BaiDuPanParse.log("\u83b7\u53d6token\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), Logger_1.Logger.debug(e);
                 })), $("#" + BaiDuPanParse.prefix + "-parser").removeAttr("disabled");
             } catch (e) {
