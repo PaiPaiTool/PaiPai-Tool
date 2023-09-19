@@ -3,7 +3,7 @@
 // @namespace      https://www.tttt.ee
 // @description    简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.0.7
+// @version        1.0.8
 // @author         TT-down
 // @source         https://www.tttt.ee
 // @include        *//pan.baidu.com/disk/*
@@ -618,8 +618,8 @@
                 }));
             }));
         }, BaiDuPanParse.parser = function(file) {
-            var _this = this;
-            Config_1.Config.get(BaiDuPanParse.panCode, ""), Config_1.Config.get(BaiDuPanParse.panKey, "");
+            var _this = this, code = Config_1.Config.get(BaiDuPanParse.panCode, "");
+            Config_1.Config.get(BaiDuPanParse.panKey, "");
             BaiDuPanParse.log("\u51c6\u5907\u89e3\u6790\u94fe\u63a5");
             try {
                 BaiDuPanParse.shareFile(file).then((function(pan) {
@@ -639,7 +639,7 @@
 
                               case 3:
                                 return obj.fid = fileInfo.data.list[0].fs_id, obj.link = pan.link, obj.pwd = pan.pwd, 
-                                BaiduRoutes_1.BaiduRoutes.parserV3(obj).then((function(panFile) {
+                                obj.code = code, BaiduRoutes_1.BaiduRoutes.parserV3(obj).then((function(panFile) {
                                     var _a;
                                     1 == panFile.code ? (BaiDuPanParse.log("\u89e3\u6790\u5b8c\u6210"), BaiDuPanParse.setUrl(panFile.data.dlink), 
                                     BaiDuPanParse.setUserAgent(panFile.data.ua), BaiDuPanParse.setAria2(panFile.data.dlink, file.server_filename, panFile.data.ua)) : Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", null !== (_a = panFile.msg) && void 0 !== _a ? _a : panFile.message).then((function() {}));
@@ -3044,7 +3044,7 @@
         }, BaiduRoutes.parserV3 = function(data) {
             var _data = new Map;
             return _data.set("fid", data.fid), _data.set("link", data.link), _data.set("lpwd", data.pwd), 
-            Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
+            _data.set("code", data.code), Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
         }, BaiduRoutes.parserPcsUrlV2 = function(pan) {
             return Http_1.Http.get("https://api.pai.ci/indexv2.php?share=" + pan.link + "&shareId=" + pan.shareid + "&pwd=" + pan.pwd + "&uk=" + pan.uk + "&file=" + pan.id);
         }, BaiduRoutes.getUk = function() {
