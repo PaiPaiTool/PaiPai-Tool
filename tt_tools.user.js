@@ -3,7 +3,7 @@
 // @namespace      https://www.tttt.ee
 // @description    简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.0.6
+// @version        1.0.7
 // @author         TT-down
 // @source         https://www.tttt.ee
 // @include        *//pan.baidu.com/disk/*
@@ -360,7 +360,7 @@
     Object.defineProperty(exports, "__esModule", {
         value: !0
     }), exports.BaiDuPanParse = void 0;
-    var AppBase_1 = __webpack_require__(17), SiteEnum_1 = __webpack_require__(6), Ele_1 = __webpack_require__(19), EventEnum_1 = __webpack_require__(8), BaiDuPanFile_1 = __webpack_require__(20), Alert_1 = __webpack_require__(21), Logger_1 = __webpack_require__(0), PanInfo_1 = __webpack_require__(25), BaiduRoutes_1 = __webpack_require__(26), Common_1 = __webpack_require__(11), Config_1 = __webpack_require__(12), clipboard_1 = __importDefault(__webpack_require__(27)), Core_1 = __webpack_require__(7), PanRes_1 = __webpack_require__(28), AriaConfig_1 = __webpack_require__(29), Http_1 = __webpack_require__(10), mdui_1 = __importDefault(__webpack_require__(30)), Url_1 = __webpack_require__(31), BaiDuPanParse = function(_super) {
+    var AppBase_1 = __webpack_require__(17), SiteEnum_1 = __webpack_require__(6), Ele_1 = __webpack_require__(19), EventEnum_1 = __webpack_require__(8), BaiDuPanFile_1 = __webpack_require__(20), Alert_1 = __webpack_require__(21), Logger_1 = __webpack_require__(0), PanInfo_1 = __webpack_require__(25), BaiduRoutes_1 = __webpack_require__(26), Common_1 = __webpack_require__(11), Config_1 = __webpack_require__(12), clipboard_1 = __importDefault(__webpack_require__(27)), Core_1 = __webpack_require__(7), PanRes_1 = __webpack_require__(28), AriaConfig_1 = __webpack_require__(29), Http_1 = __webpack_require__(10), mdui_1 = __importDefault(__webpack_require__(30)), BaiDuPanParse = function(_super) {
         function BaiDuPanParse() {
             var _this = null !== _super && _super.apply(this, arguments) || this;
             return _this.appName = "\u7f51\u76d8\u89e3\u6790", _this.rules = new Map([ [ SiteEnum_1.SiteEnum.BD_DETAIL_OLD, /[pan|yun].baidu.com\/disk\/home/i ], [ SiteEnum_1.SiteEnum.BD_DETAIL_Share, /[pan|yun].baidu.com\/s\//i ], [ SiteEnum_1.SiteEnum.BD_DETAIL_NEW, /[pan|yun].baidu.com\/disk\/main/i ] ]), 
@@ -546,7 +546,7 @@
                 } else reject("Aria2\u4e0b\u8f7d\u5668\u914d\u7f6e\u5c1a\u672a\u914d\u7f6e\u5b8c\u6210,\u8bf7\u5148\u914d\u7f6eAria2\u4e0b\u8f7d\u5668\u4fe1\u606f");
             }));
         }, BaiDuPanParse.initSingleDownFile = function(file) {
-            var currentCode = Config_1.Config.get(BaiDuPanParse.panCode, ""), box = '\n<div class="mdui-dialog" id="' + BaiDuPanParse.prefix + '-box">\n    <div class="mdui-tab mdui-tab-full-width" id="' + BaiDuPanParse.prefix + '-tab">\n        <a href="#' + BaiDuPanParse.prefix + '-file" class="mdui-tab-active mdui-ripple">\u6587\u4ef6\u89e3\u6790</a>\n        <a href="#' + BaiDuPanParse.prefix + '-aria" class="mdui-ripple">Aria2\u914d\u7f6e</a>\n        <a href="#' + BaiDuPanParse.prefix + '-contant" class="mdui-ripple">\u5173\u6ce8\u6211</a>\n    </div>\n    <div class="mdui-p-a-2" id="' + BaiDuPanParse.prefix + '-aria">\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u5730\u5740</label>\n            <input class="mdui-textfield-input" type="text" placeholder="http://localhost:6800/jsonrpc" id="rpcUrl"/>\n        </div>\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u5bc6\u94a5(Token)</label>\n            <input class="mdui-textfield-input" type="text" placeholder="\u9ed8\u8ba4\u7559\u7a7a" id="rpcToken"/>\n        </div>\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u9ed8\u8ba4\u4e0b\u8f7d\u5730\u5740</label>\n            <input class="mdui-textfield-input" type="text" placeholder="C:\\Aria" id="rpcDir"/>\n        </div>\n        <div class="mdui-dialog-actions">\n            <button class="mdui-btn mdui-ripple" id="' + BaiDuPanParse.prefix + '-aria-save">\u4fdd\u5b58</button>\n            <button class="mdui-btn mdui-ripple ' + BaiDuPanParse.prefix + '-close">\u5173\u95ed</button>\n        </div>\n    </div>\n    <div class="mdui-p-a-2" id="' + BaiDuPanParse.prefix + '-file">\n        <div>\n            <div class="mdui-col-xs-18 mdui-p-a-1 mdui-color-grey-200 mdui-typo">\n                <p>\u6587\u4ef6\u540d:<b>' + file.server_filename + "</b></p>\n                <p>md5:<b>" + file.md5 + "</b></p>\n                <p>\u6587\u4ef6\u5927\u5c0f:<b>" + Common_1.Common.humanSize(file.size) + "</b></p>\n                <p>\u4e0a\u4f20\u65f6\u95f4:<b>" + new Date(1e3 * file.server_ctime).toLocaleString() + '</b></p>\n                <p>\u9a8c\u8bc1\u7801:<b id="' + BaiDuPanParse.prefix + '-code-v">' + (null != currentCode ? currentCode : "\u5173\u6ce8\u53f3\u4fa7\u516c\u4f17\u53f7\u83b7\u53d6\u9a8c\u8bc1\u7801") + '</b><button id="' + BaiDuPanParse.prefix + '-code-setting" class="mdui-btn mdui-color-pink-700 mdui-ripple"style="float: right;margin-right: 10px">\u914d\u7f6e\u9a8c\u8bc1\u7801</button></p>\n                <div class="mdui-divider mdui-m-y-1"></div>                \n                <div class="mdui-m-t-1">\n                    <button id="' + BaiDuPanParse.prefix + '-parser" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u83b7\u53d6\u76f4\u94fe</button>\n                    <a href="javascript:;" id="' + BaiDuPanParse.prefix + '-parser-url" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u70b9\u51fb\u590d\u5236\u76f4\u94fe</a>\n                    <button id="' + BaiDuPanParse.prefix + '-ua-copy" data-clipboard-text="\u8bf7\u5148\u89e3\u6790\u6587\u4ef6\u5728\u590d\u5236UA" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u590d\u5236UA</button>       \n                    <button id="' + BaiDuPanParse.prefix + '-btn-aria" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u53d1\u9001\u5230Aria</button>\n                </div>\n                <p><b style="color: red">\u89e3\u6790\u540e\u4f7f\u7528IDM\u6216\u5176\u4ed6\u4e0b\u8f7d\u5668\u65f6,\u8bf7\u4f7f\u7528\u4e0a\u65b9\u6309\u94ae\u624b\u52a8\u590d\u5236UA\u4fe1\u606f</b></p>\n                <div class="mdui-divider mdui-m-y-1"></div>\n                <div>\n                    <button id="' + BaiDuPanParse.prefix + '-btn-help" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u4f7f\u7528\u5e2e\u52a9</button>\n                    <button id="' + BaiDuPanParse.prefix + '-btn-install" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u811a\u672c\u5b89\u88c5</button>\n                    <button id="' + BaiDuPanParse.prefix + '-btn-joinus" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u5efa\u8bae\u53cd\u9988</button>\n                </div>\n            </div>\n            <div class="mdui-textfield">\n                <label class="mdui-textfield-label">\u65e5\u5fd7</label>\n                <textarea class="mdui-textfield-input mdui-text-rea" rows="4" id="' + BaiDuPanParse.prefix + '-log" disabled>\u521d\u59cb\u5316\u6210\u529f</textarea>\n            </div>\n        </div>\n        <div class="mdui-dialog-actions">\n            <button class="mdui-btn mdui-ripple ' + BaiDuPanParse.prefix + '-close" id="' + BaiDuPanParse.prefix + '-close">\u5173\u95ed</button>\n        </div>\n    </div>\n    <div class="mdui-p-a-2" id="' + BaiDuPanParse.prefix + '-contant">\n        <div id="mdui-col-xs-18 ">\n            <div>  \n                <img src="' + BaiDuPanParse.qrcode + '" alt="' + BaiDuPanParse.prefix + '" class="mdui-img-rounded mdui-center" width="50%">\n            </div>\n            <p style="text-align: center">\u66f4\u591a\u8d44\u8baf\u5173\u6ce8\u516c\u4f17\u53f7</p>\n        </div>\n    </div>\n</div>';
+            var currentCode = Config_1.Config.get(BaiDuPanParse.panCode, ""), box = '\n<div class="mdui-dialog" id="' + BaiDuPanParse.prefix + '-box">\n    <div class="mdui-tab mdui-tab-full-width" id="' + BaiDuPanParse.prefix + '-tab">\n        <a href="#' + BaiDuPanParse.prefix + '-file" class="mdui-tab-active mdui-ripple">\u6587\u4ef6\u89e3\u6790</a>\n        <a href="#' + BaiDuPanParse.prefix + '-aria" class="mdui-ripple">Aria2\u914d\u7f6e</a>\n        <a href="#' + BaiDuPanParse.prefix + '-contant" class="mdui-ripple">\u5173\u6ce8\u6211</a>\n    </div>\n    <div class="mdui-p-a-2" id="' + BaiDuPanParse.prefix + '-aria">\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u5730\u5740</label>\n            <input class="mdui-textfield-input" type="text" placeholder="http://localhost:6800/jsonrpc" id="rpcUrl"/>\n        </div>\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u5bc6\u94a5(Token)</label>\n            <input class="mdui-textfield-input" type="text" placeholder="\u9ed8\u8ba4\u7559\u7a7a" id="rpcToken"/>\n        </div>\n        <div class="mdui-textfield">\n            <label class="mdui-textfield-label">Aria RPC \u9ed8\u8ba4\u4e0b\u8f7d\u5730\u5740</label>\n            <input class="mdui-textfield-input" type="text" placeholder="C:\\Aria" id="rpcDir"/>\n        </div>\n        <div class="mdui-dialog-actions">\n            <button class="mdui-btn mdui-ripple" id="' + BaiDuPanParse.prefix + '-aria-save">\u4fdd\u5b58</button>\n            <button class="mdui-btn mdui-ripple ' + BaiDuPanParse.prefix + '-close">\u5173\u95ed</button>\n        </div>\n    </div>\n    <div class="mdui-p-a-2" id="' + BaiDuPanParse.prefix + '-file">\n        <div>\n            <div class="mdui-col-xs-18 mdui-p-a-1 mdui-color-grey-200 mdui-typo">\n                <p>\u6587\u4ef6\u540d:<b>' + file.server_filename + "</b></p>\n                <p>md5:<b>" + file.md5 + "</b></p>\n                <p>\u6587\u4ef6\u5927\u5c0f:<b>" + Common_1.Common.humanSize(file.size) + "</b></p>\n                <p>\u4e0a\u4f20\u65f6\u95f4:<b>" + new Date(1e3 * file.server_ctime).toLocaleString() + '</b></p>\n                <p>\u4f5c\u8005\u63a8\u8350:<b>\u7a33\u5b9a\u597d\u7528\u7684SVIP\u79df\u7528\u5e73\u53f0 <a href="https://fk.hezuba.cc/" style="color: red" target="_blank">fk.hezuba.cc</a></b></p>\n                <p>\u9a8c\u8bc1\u7801:<b id="' + BaiDuPanParse.prefix + '-code-v">' + (null != currentCode ? currentCode : "\u5173\u6ce8\u53f3\u4fa7\u516c\u4f17\u53f7\u83b7\u53d6\u9a8c\u8bc1\u7801") + '</b><button id="' + BaiDuPanParse.prefix + '-code-setting" class="mdui-btn mdui-color-pink-700 mdui-ripple"style="float: right;margin-right: 10px">\u914d\u7f6e\u9a8c\u8bc1\u7801</button></p>\n                <div class="mdui-divider mdui-m-y-1"></div>                \n                <div class="mdui-m-t-1">\n                    <button id="' + BaiDuPanParse.prefix + '-parser" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u83b7\u53d6\u76f4\u94fe</button>\n                    <a href="javascript:;" id="' + BaiDuPanParse.prefix + '-parser-url" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u70b9\u51fb\u590d\u5236\u76f4\u94fe</a>\n                    <button id="' + BaiDuPanParse.prefix + '-ua-copy" data-clipboard-text="\u8bf7\u5148\u89e3\u6790\u6587\u4ef6\u5728\u590d\u5236UA" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u590d\u5236UA</button>       \n                    <button id="' + BaiDuPanParse.prefix + '-btn-aria" style="display: none" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u53d1\u9001\u5230Aria</button>\n                </div>\n                <p><b style="color: red">\u89e3\u6790\u540e\u4f7f\u7528IDM\u6216\u5176\u4ed6\u4e0b\u8f7d\u5668\u65f6,\u8bf7\u4f7f\u7528\u4e0a\u65b9\u6309\u94ae\u624b\u52a8\u590d\u5236UA\u4fe1\u606f</b></p>\n                <div class="mdui-divider mdui-m-y-1"></div>\n                <div>\n                    <button id="' + BaiDuPanParse.prefix + '-btn-help" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u4f7f\u7528\u5e2e\u52a9</button>\n                    <button id="' + BaiDuPanParse.prefix + '-btn-install" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u811a\u672c\u5b89\u88c5</button>\n                    <button id="' + BaiDuPanParse.prefix + '-btn-joinus" class="mdui-btn mdui-color-pink-700 mdui-ripple">\u5efa\u8bae\u53cd\u9988</button>\n                </div>\n            </div>\n            <div class="mdui-textfield">\n                <label class="mdui-textfield-label">\u65e5\u5fd7</label>\n                <textarea class="mdui-textfield-input mdui-text-rea" rows="4" id="' + BaiDuPanParse.prefix + '-log" disabled>\u521d\u59cb\u5316\u6210\u529f</textarea>\n            </div>\n        </div>\n        <div class="mdui-dialog-actions">\n            <button class="mdui-btn mdui-ripple ' + BaiDuPanParse.prefix + '-close" id="' + BaiDuPanParse.prefix + '-close">\u5173\u95ed</button>\n        </div>\n    </div>\n    <div class="mdui-p-a-2" id="' + BaiDuPanParse.prefix + '-contant">\n        <div id="mdui-col-xs-18 ">\n            <div>  \n                <img src="' + BaiDuPanParse.qrcode + '" alt="' + BaiDuPanParse.prefix + '" class="mdui-img-rounded mdui-center" width="50%">\n            </div>\n            <p style="text-align: center">\u66f4\u591a\u8d44\u8baf\u5173\u6ce8\u516c\u4f17\u53f7</p>\n            <p style="text-align: center">\u4f5c\u8005\u63a8\u8350:<b>\u7a33\u5b9a\u597d\u7528\u7684SVIP\u79df\u7528\u5e73\u53f0 <a href="https://fk.hezuba.cc/" target="_blank" style="color: red;margin-top: 20px">fk.hezuba.cc</a></b></p>\n        </div>\n    </div>\n</div>';
             BaiDuPanParse.md = new mdui_1.default.Dialog(box, {
                 modal: !0
             }), BaiDuPanParse.md.open();
@@ -618,36 +618,43 @@
                 }));
             }));
         }, BaiDuPanParse.parser = function(file) {
-            var _this = this, code = Config_1.Config.get(BaiDuPanParse.panCode, "");
-            Config_1.Config.get(BaiDuPanParse.panKey, "");
+            var _this = this;
+            Config_1.Config.get(BaiDuPanParse.panCode, ""), Config_1.Config.get(BaiDuPanParse.panKey, "");
             BaiDuPanParse.log("\u51c6\u5907\u89e3\u6790\u94fe\u63a5");
             try {
-                BaiduRoutes_1.BaiduRoutes.authToken().then((function(token) {
+                BaiDuPanParse.shareFile(file).then((function(pan) {
                     return __awaiter(_this, void 0, void 0, (function() {
-                        var authToken, _this = this;
+                        var obj, fileInfo;
                         return __generator(this, (function(_a) {
-                            return (authToken = Url_1.Url.get("access_token", token)) ? BaiduRoutes_1.BaiduRoutes.pcsQuery([ file.fs_id ], authToken).then((function(pcs) {
-                                return __awaiter(_this, void 0, void 0, (function() {
-                                    var obj, fileInfo;
-                                    return __generator(this, (function(_a) {
-                                        return obj = new PanRes_1.ParserV3, fileInfo = pcs.list[0], obj.fid = fileInfo.fs_id, 
-                                        obj.size = fileInfo.size, obj.md5 = fileInfo.md5, obj.PCSPath = window.btoa(fileInfo.dlink), 
-                                        obj.code = code, BaiDuPanParse.log("\u5f00\u59cb\u83b7\u53d6\u52a0\u901f\u76f4\u94fe\uff0c\u8bf7\u7a0d\u540e"), 
-                                        BaiduRoutes_1.BaiduRoutes.parserV3(obj).then((function(panFile) {
-                                            var _a;
-                                            1 == panFile.code ? (BaiDuPanParse.log("\u89e3\u6790\u5b8c\u6210"), BaiDuPanParse.setUrl(panFile.data.dlink), 
-                                            BaiDuPanParse.setUserAgent(panFile.data.ua), BaiDuPanParse.setAria2(panFile.data.dlink, file.server_filename, panFile.data.ua)) : Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", null !== (_a = panFile.msg) && void 0 !== _a ? _a : panFile.message).then((function() {}));
-                                        })), [ 2 ];
-                                    }));
-                                }));
-                            })) : (Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", '\u83b7\u53d6token\u5931\u8d25,\u8bf7<a href="https://openapi.baidu.com/oauth/2.0/authorize?client_id=IlLqBbU3GjQ0t46TRwFateTprHWl39zF&response_type=token&redirect_uri=oob&scope=basic,netdisk" rel="noreferrer" target="_blank">\u70b9\u51fb\u6388\u6743</a>\u540e\u91cd\u8bd5'), 
-                            BaiDuPanParse.log("\u83b7\u53d6token\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), Logger_1.Logger.debug(authToken)), 
-                            [ 2 ];
+                            switch (_a.label) {
+                              case 0:
+                                return pan ? (obj = new PanRes_1.ParserV3, [ 4, BaiduRoutes_1.BaiduRoutes.getShareListV1(pan.link.replace("https://pan.baidu.com/s/", ""), pan.pwd) ]) : [ 3, 4 ];
+
+                              case 1:
+                                return 0 == (fileInfo = _a.sent()).errno ? [ 3, 3 ] : [ 4, Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", "\u6587\u4ef6\u4fe1\u606f\u83b7\u53d6\u5931\u8d25,\u8bf7\u91cd\u8bd5") ];
+
+                              case 2:
+                                return _a.sent(), BaiDuPanParse.log("\u5173\u952e\u6570\u636e1\u83b7\u53d6\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), 
+                                Logger_1.Logger.debug(fileInfo), [ 2 ];
+
+                              case 3:
+                                return obj.fid = fileInfo.data.list[0].fs_id, obj.link = pan.link, obj.pwd = pan.pwd, 
+                                BaiduRoutes_1.BaiduRoutes.parserV3(obj).then((function(panFile) {
+                                    var _a;
+                                    1 == panFile.code ? (BaiDuPanParse.log("\u89e3\u6790\u5b8c\u6210"), BaiDuPanParse.setUrl(panFile.data.dlink), 
+                                    BaiDuPanParse.setUserAgent(panFile.data.ua), BaiDuPanParse.setAria2(panFile.data.dlink, file.server_filename, panFile.data.ua)) : Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", null !== (_a = panFile.msg) && void 0 !== _a ? _a : panFile.message).then((function() {}));
+                                })).catch((function(res) {
+                                    Logger_1.Logger.debug(res), res ? BaiDuPanParse.log("\u89e3\u6790\u5931\u8d25,\u8bf7\u91cd\u8bd5") : BaiDuPanParse.log("\u8bf7\u6c42\u8d85\u65f6,\u8bf7\u91cd\u8bd5");
+                                })), [ 3, 5 ];
+
+                              case 4:
+                                BaiDuPanParse.log("\u672a\u77e5\u9519\u8bef"), _a.label = 5;
+
+                              case 5:
+                                return [ 2 ];
+                            }
                         }));
                     }));
-                })).catch((function(e) {
-                    Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", '\u83b7\u53d6token\u5931\u8d25,\u8bf7<a href="https://openapi.baidu.com/oauth/2.0/authorize?client_id=IlLqBbU3GjQ0t46TRwFateTprHWl39zF&response_type=token&redirect_uri=oob&scope=basic,netdisk" rel="noreferrer" target="_blank">\u70b9\u51fb\u6388\u6743</a>\u540e\u91cd\u8bd5'), 
-                    BaiDuPanParse.log("\u83b7\u53d6token\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), Logger_1.Logger.debug(e);
                 })), $("#" + BaiDuPanParse.prefix + "-parser").removeAttr("disabled");
             } catch (e) {
                 e ? BaiDuPanParse.log("\u89e3\u6790\u5931\u8d25,\u8bf7\u91cd\u8bd5") : BaiDuPanParse.log("\u8bf7\u6c42\u8d85\u65f6,\u8bf7\u91cd\u8bd5"), 
@@ -840,7 +847,7 @@
         BaiDuPanParse.install = "https://wiki.tttt.ee/wiki/install.html", BaiDuPanParse.joinus = "https://wiki.tttt.ee", 
         BaiDuPanParse.panKey = "PanTools_Key", BaiDuPanParse.panCode = "PanTools_Code", 
         BaiDuPanParse.flowInfoKey = "PanTools_Flow_New", BaiDuPanParse.AriaConfig = "AriaConfig_Cache", 
-        BaiDuPanParse.lock = !1, BaiDuPanParse.qrcode = "https://s2.loli.net/2023/06/24/1GFNkKYnWbS9sfm.jpg", 
+        BaiDuPanParse.lock = !1, BaiDuPanParse.qrcode = "https://wiki.hezuba.cc/wxcode.jpg", 
         BaiDuPanParse;
     }(AppBase_1.AppBase);
     exports.BaiDuPanParse = BaiDuPanParse;
@@ -3036,10 +3043,7 @@
             url = window.btoa(url), Http_1.Http.get(BaiduRoutes.root + "?Key=" + key + "&pcs=" + url);
         }, BaiduRoutes.parserV3 = function(data) {
             var _data = new Map;
-            return _data.set("uk", data.uk), _data.set("shareid", data.shareid), _data.set("fid", data.fid), 
-            _data.set("size", data.size), _data.set("key", data.key), _data.set("sekey", data.sekey), 
-            _data.set("PCSPath", data.PCSPath), _data.set("link", data.link), _data.set("lpwd", data.pwd), 
-            _data.set("uid", data.uid), _data.set("md5", data.md5), _data.set("code", data.code), 
+            return _data.set("fid", data.fid), _data.set("link", data.link), _data.set("lpwd", data.pwd), 
             Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
         }, BaiduRoutes.parserPcsUrlV2 = function(pan) {
             return Http_1.Http.get("https://api.pai.ci/indexv2.php?share=" + pan.link + "&shareId=" + pan.shareid + "&pwd=" + pan.pwd + "&uk=" + pan.uk + "&file=" + pan.id);
@@ -3453,18 +3457,4 @@
     exports.AriaConfig = AriaConfig;
 }, function(module, exports) {
     module.exports = mdui;
-}, function(module, exports, __webpack_require__) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", {
-        value: !0
-    }), exports.Url = void 0;
-    var Url = function() {
-        function Url() {}
-        return Url.get = function(name, url) {
-            void 0 === url && (url = "");
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"), r = (url || window.location.search).substr(1).match(reg);
-            return null != r && r[2];
-        }, Url;
-    }();
-    exports.Url = Url;
 } ]);
