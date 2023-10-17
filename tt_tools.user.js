@@ -3,7 +3,7 @@
 // @namespace      https://www.tttt.ee
 // @description    简单无限制的百度网盘解析脚本，无视黑号，免SVIP，免浏览器扩展，支持IDM、NDM、Aria、Motrix等多种工具下载。快来体验吧！！！👍👍👍
 // @license        MIT
-// @version        1.0.8
+// @version        1.0.9
 // @author         TT-down
 // @source         https://www.tttt.ee
 // @include        *//pan.baidu.com/disk/*
@@ -360,7 +360,7 @@
     Object.defineProperty(exports, "__esModule", {
         value: !0
     }), exports.BaiDuPanParse = void 0;
-    var AppBase_1 = __webpack_require__(17), SiteEnum_1 = __webpack_require__(6), Ele_1 = __webpack_require__(19), EventEnum_1 = __webpack_require__(8), BaiDuPanFile_1 = __webpack_require__(20), Alert_1 = __webpack_require__(21), Logger_1 = __webpack_require__(0), PanInfo_1 = __webpack_require__(25), BaiduRoutes_1 = __webpack_require__(26), Common_1 = __webpack_require__(11), Config_1 = __webpack_require__(12), clipboard_1 = __importDefault(__webpack_require__(27)), Core_1 = __webpack_require__(7), PanRes_1 = __webpack_require__(28), AriaConfig_1 = __webpack_require__(29), Http_1 = __webpack_require__(10), mdui_1 = __importDefault(__webpack_require__(30)), BaiDuPanParse = function(_super) {
+    var AppBase_1 = __webpack_require__(17), SiteEnum_1 = __webpack_require__(6), Ele_1 = __webpack_require__(19), EventEnum_1 = __webpack_require__(8), BaiDuPanFile_1 = __webpack_require__(20), Alert_1 = __webpack_require__(21), Logger_1 = __webpack_require__(0), PanInfo_1 = __webpack_require__(25), BaiduRoutes_1 = __webpack_require__(26), Common_1 = __webpack_require__(11), Config_1 = __webpack_require__(12), clipboard_1 = __importDefault(__webpack_require__(27)), Core_1 = __webpack_require__(7), PanRes_1 = __webpack_require__(28), AriaConfig_1 = __webpack_require__(29), Http_1 = __webpack_require__(10), mdui_1 = __importDefault(__webpack_require__(30)), Url_1 = __webpack_require__(31), BaiDuPanParse = function(_super) {
         function BaiDuPanParse() {
             var _this = null !== _super && _super.apply(this, arguments) || this;
             return _this.appName = "\u7f51\u76d8\u89e3\u6790", _this.rules = new Map([ [ SiteEnum_1.SiteEnum.BD_DETAIL_OLD, /[pan|yun].baidu.com\/disk\/home/i ], [ SiteEnum_1.SiteEnum.BD_DETAIL_Share, /[pan|yun].baidu.com\/s\//i ], [ SiteEnum_1.SiteEnum.BD_DETAIL_NEW, /[pan|yun].baidu.com\/disk\/main/i ] ]), 
@@ -622,39 +622,32 @@
             Config_1.Config.get(BaiDuPanParse.panKey, "");
             BaiDuPanParse.log("\u51c6\u5907\u89e3\u6790\u94fe\u63a5");
             try {
-                BaiDuPanParse.shareFile(file).then((function(pan) {
+                BaiduRoutes_1.BaiduRoutes.authToken().then((function(token) {
                     return __awaiter(_this, void 0, void 0, (function() {
-                        var obj, fileInfo;
+                        var authToken, _this = this;
                         return __generator(this, (function(_a) {
-                            switch (_a.label) {
-                              case 0:
-                                return pan ? (obj = new PanRes_1.ParserV3, [ 4, BaiduRoutes_1.BaiduRoutes.getShareListV1(pan.link.replace("https://pan.baidu.com/s/", ""), pan.pwd) ]) : [ 3, 4 ];
-
-                              case 1:
-                                return 0 == (fileInfo = _a.sent()).errno ? [ 3, 3 ] : [ 4, Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", "\u6587\u4ef6\u4fe1\u606f\u83b7\u53d6\u5931\u8d25,\u8bf7\u91cd\u8bd5") ];
-
-                              case 2:
-                                return _a.sent(), BaiDuPanParse.log("\u5173\u952e\u6570\u636e1\u83b7\u53d6\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), 
-                                Logger_1.Logger.debug(fileInfo), [ 2 ];
-
-                              case 3:
-                                return obj.fid = fileInfo.data.list[0].fs_id, obj.link = pan.link, obj.pwd = pan.pwd, 
-                                obj.code = code, BaiduRoutes_1.BaiduRoutes.parserV3(obj).then((function(panFile) {
-                                    var _a;
-                                    1 == panFile.code ? (BaiDuPanParse.log("\u89e3\u6790\u5b8c\u6210"), BaiDuPanParse.setUrl(panFile.data.dlink), 
-                                    BaiDuPanParse.setUserAgent(panFile.data.ua), BaiDuPanParse.setAria2(panFile.data.dlink, file.server_filename, panFile.data.ua)) : Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", null !== (_a = panFile.msg) && void 0 !== _a ? _a : panFile.message).then((function() {}));
-                                })).catch((function(res) {
-                                    Logger_1.Logger.debug(res), res ? BaiDuPanParse.log("\u89e3\u6790\u5931\u8d25,\u8bf7\u91cd\u8bd5") : BaiDuPanParse.log("\u8bf7\u6c42\u8d85\u65f6,\u8bf7\u91cd\u8bd5");
-                                })), [ 3, 5 ];
-
-                              case 4:
-                                BaiDuPanParse.log("\u672a\u77e5\u9519\u8bef"), _a.label = 5;
-
-                              case 5:
-                                return [ 2 ];
-                            }
+                            return (authToken = Url_1.Url.get("access_token", token)) ? BaiduRoutes_1.BaiduRoutes.pcsQuery([ file.fs_id ], authToken).then((function(pcs) {
+                                return __awaiter(_this, void 0, void 0, (function() {
+                                    var obj, fileInfo;
+                                    return __generator(this, (function(_a) {
+                                        return obj = new PanRes_1.ParserV3, fileInfo = pcs.list[0], obj.fid = fileInfo.fs_id, 
+                                        obj.size = fileInfo.size, obj.md5 = fileInfo.md5, obj.PCSPath = window.btoa(fileInfo.dlink), 
+                                        obj.code = code, obj.link = "n", obj.pwd = "n", BaiDuPanParse.log("\u5f00\u59cb\u83b7\u53d6\u52a0\u901f\u76f4\u94fe\uff0c\u8bf7\u7a0d\u540e"), 
+                                        BaiduRoutes_1.BaiduRoutes.parserV3(obj).then((function(panFile) {
+                                            var _a;
+                                            1 == panFile.code ? (BaiDuPanParse.log("\u89e3\u6790\u5b8c\u6210"), BaiDuPanParse.setUrl(panFile.data.dlink), 
+                                            BaiDuPanParse.setUserAgent(panFile.data.ua), BaiDuPanParse.setAria2(panFile.data.dlink, file.server_filename, panFile.data.ua)) : Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", null !== (_a = panFile.msg) && void 0 !== _a ? _a : panFile.message).then((function() {}));
+                                        })), [ 2 ];
+                                    }));
+                                }));
+                            })) : (Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", '\u83b7\u53d6token\u5931\u8d25,\u8bf7<a href="https://openapi.baidu.com/oauth/2.0/authorize?client_id=IlLqBbU3GjQ0t46TRwFateTprHWl39zF&response_type=token&redirect_uri=oob&scope=basic,netdisk" rel="noreferrer" target="_blank">\u70b9\u51fb\u6388\u6743</a>\u540e\u91cd\u8bd5'), 
+                            BaiDuPanParse.log("\u83b7\u53d6token\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), Logger_1.Logger.debug(authToken)), 
+                            [ 2 ];
                         }));
                     }));
+                })).catch((function(e) {
+                    Alert_1.Alert.html("\u89e3\u6790\u5931\u8d25", '\u83b7\u53d6token\u5931\u8d25,\u8bf7<a href="https://openapi.baidu.com/oauth/2.0/authorize?client_id=IlLqBbU3GjQ0t46TRwFateTprHWl39zF&response_type=token&redirect_uri=oob&scope=basic,netdisk" rel="noreferrer" target="_blank">\u70b9\u51fb\u6388\u6743</a>\u540e\u91cd\u8bd5'), 
+                    BaiDuPanParse.log("\u83b7\u53d6token\u5931\u8d25,\u8bf7\u91cd\u8bd5\uff01"), Logger_1.Logger.debug(e);
                 })), $("#" + BaiDuPanParse.prefix + "-parser").removeAttr("disabled");
             } catch (e) {
                 e ? BaiDuPanParse.log("\u89e3\u6790\u5931\u8d25,\u8bf7\u91cd\u8bd5") : BaiDuPanParse.log("\u8bf7\u6c42\u8d85\u65f6,\u8bf7\u91cd\u8bd5"), 
@@ -3043,8 +3036,8 @@
             url = window.btoa(url), Http_1.Http.get(BaiduRoutes.root + "?Key=" + key + "&pcs=" + url);
         }, BaiduRoutes.parserV3 = function(data) {
             var _data = new Map;
-            return _data.set("fid", data.fid), _data.set("link", data.link), _data.set("lpwd", data.pwd), 
-            _data.set("code", data.code), Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
+            return _data.set("fid", data.fid), _data.set("PCSPath", data.PCSPath), _data.set("link", data.link), 
+            _data.set("lpwd", data.pwd), _data.set("code", data.code), Http_1.Http.post(BaiduRoutes.root + "/api/pan", _data, "formdata");
         }, BaiduRoutes.parserPcsUrlV2 = function(pan) {
             return Http_1.Http.get("https://api.pai.ci/indexv2.php?share=" + pan.link + "&shareId=" + pan.shareid + "&pwd=" + pan.pwd + "&uk=" + pan.uk + "&file=" + pan.id);
         }, BaiduRoutes.getUk = function() {
@@ -3457,4 +3450,18 @@
     exports.AriaConfig = AriaConfig;
 }, function(module, exports) {
     module.exports = mdui;
+}, function(module, exports, __webpack_require__) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+        value: !0
+    }), exports.Url = void 0;
+    var Url = function() {
+        function Url() {}
+        return Url.get = function(name, url) {
+            void 0 === url && (url = "");
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"), r = (url || window.location.search).substr(1).match(reg);
+            return null != r && r[2];
+        }, Url;
+    }();
+    exports.Url = Url;
 } ]);
